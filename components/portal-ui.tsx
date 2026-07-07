@@ -19,6 +19,7 @@ type EventItem = {
   title: string;
   dateLabel: string;
   place: string;
+  description: string;
 };
 
 const defaultSports: NavItem[] = [
@@ -169,12 +170,12 @@ export function HeroNews({ item }: { item: FeedItem }) {
 
 export function HeroShowcase({
   featured,
-  headlines
+  radar
 }: {
   featured: FeedItem[];
-  headlines: FeedItem[];
+  radar: FeedItem[];
 }) {
-  const items = featured.length ? featured : headlines;
+  const items = featured;
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
@@ -244,27 +245,12 @@ export function HeroShowcase({
         </div>
       </div>
 
-      <aside className="headlines-panel">
-        <div className="headlines-top">
-          <div>
-            <span className="section-kicker">Dabar</span>
-            <h3>Naujausia</h3>
-          </div>
-          <a href="#naujienos">Visos naujienos</a>
-        </div>
-
-        <div className="headlines-list">
-          {headlines.slice(0, 7).map((item) => (
-            <Link key={item.id} href={`/${item.slug}`} className="headline-item">
-              <div className="headline-copy">
-                <span className={`tag small ${getSportClass(item.sport)}`}>{toTitle(item.sport)}</span>
-                <strong>{item.title}</strong>
-                <small>{formatTime(item.publishedAt)}</small>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </aside>
+      <SportRadarSidebar
+        items={radar}
+        title="Sporto radaras"
+        description="Aktualiausi trumpi signalai ir AI redakcijos įžvalgos"
+        compact
+      />
     </section>
   );
 }
@@ -356,14 +342,16 @@ export function ShortSignalCard({ item }: { item: FeedItem }) {
 export function SportRadarSidebar({
   items,
   title = "Sporto radaras",
-  description = "Trumpi signalai, kurie leidžia suprasti dienos pulsą"
+  description = "Trumpi signalai, kurie leidžia suprasti dienos pulsą",
+  compact = false
 }: {
   items: FeedItem[];
   title?: string;
   description?: string;
+  compact?: boolean;
 }) {
   return (
-    <aside className="radar-panel">
+    <aside id="radaras" className={`radar-panel ${compact ? "compact" : ""}`}>
       <div className="block-head radar-head">
         <div>
           <span className="section-kicker live-kicker"><span className="live-dot" /> Gyvas srautas</span>
@@ -373,7 +361,7 @@ export function SportRadarSidebar({
       </div>
 
       <div className="signals-list">
-        {items.slice(0, 10).map((item) => (
+        {items.slice(0, compact ? 3 : 10).map((item) => (
           <ShortSignalCard key={item.id} item={item} />
         ))}
       </div>
@@ -396,6 +384,8 @@ export function LatestNewsFeed({ items }: { items: FeedItem[] }) {
     if (activeFilter === "Visos") return items;
     return items.filter((item) => toTitle(item.sport) === activeFilter);
   }, [activeFilter, items]);
+
+  if (!items.length) return null;
 
   return (
     <section className="content-block" id="naujienos">
@@ -471,6 +461,10 @@ export function EventCalendarPreview({ items }: { items: EventItem[] }) {
             <strong>{item.dateLabel}</strong>
             <h3>{item.title}</h3>
             <p>{item.place}</p>
+            <details className="event-details">
+              <summary>Daugiau informacijos</summary>
+              <p>{item.description}</p>
+            </details>
           </article>
         ))}
       </div>
@@ -516,36 +510,40 @@ export function Footer() {
 
 export function HomePortal({
   hero,
-  topStories,
   latest,
   radar,
   sections,
   events
 }: {
   hero: FeedItem;
-  topStories: FeedItem[];
   latest: FeedItem[];
   radar: FeedItem[];
   sections: CategorySection[];
   events: EventItem[];
 }) {
+  const featuredItems = [hero, ...latest]
+    .filter((item, index, items) => Boolean(item.imageUrl) && items.findIndex((candidate) => candidate.id === item.id) === index)
+    .slice(0, 5);
+  const featuredIds = new Set(featuredItems.map((item) => item.id));
+  const olderItems = latest.filter((item) => item.imageUrl && !featuredIds.has(item.id));
+  const olderSections = sections
+    .map((section) => ({
+      ...section,
+      items: section.items.filter((item) => item.imageUrl && !featuredIds.has(item.id))
+    }))
+    .filter((section) => section.items.length > 0);
+
   return (
     <main className="page-shell">
       <Header />
       <SportCategoryNav />
 
-      <HeroShowcase featured={[hero, ...latest].slice(0, 5)} headlines={latest} />
+      <HeroShowcase featured={featuredItems} radar={radar} />
 
-      <TopStoriesGrid items={topStories} />
+      <div className="main-column home-main-column">
+          <LatestNewsFeed items={olderItems} />
 
-      <div className="main-grid home-feed-grid" id="radaras">
-        <div className="main-column">
-          <div className="radar-mobile">
-            <SportRadarSidebar items={radar} />
-          </div>
-          <LatestNewsFeed items={latest} />
-
-          {sections.map((section) => (
+          {olderSections.map((section) => (
             <section key={section.title} className="content-block" id={section.sport}>
               <div className="block-head">
                 <div>
@@ -562,12 +560,6 @@ export function HomePortal({
           ))}
 
           <EventCalendarPreview items={events} />
-          <NewsletterSignup />
-        </div>
-
-        <div className="sidebar-column">
-          <SportRadarSidebar items={radar} />
-        </div>
       </div>
 
       <Footer />

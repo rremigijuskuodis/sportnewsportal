@@ -4,7 +4,7 @@ import { loadPortalFeed } from "@/lib/supabase";
 
 export default async function HomePage() {
   const { shortFeed, articleFeed } = await loadPortalFeed();
-  const { hero, important, latest, radar, groups, events } = preparePortalData(
+  const { hero, latest, radar, groups, events } = preparePortalData(
     articleFeed,
     shortFeed
   );
@@ -21,7 +21,6 @@ export default async function HomePage() {
   return (
     <HomePortal
       hero={hero}
-      topStories={important}
       latest={latest}
       radar={radar}
       sections={groups}
