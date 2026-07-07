@@ -79,26 +79,23 @@ function getWhyText(item: FeedItem) {
 export function Header() {
   return (
     <header className="site-header">
-      <div className="brand-group">
-        <Link href="/" className="brandmark">
-          <span className="brandmark-badge">S</span>
-          <span>
-            <strong>Sporto redakcija</strong>
-            <small>Lietuvos sporto naujienos aiškiau ir greičiau</small>
-          </span>
-        </Link>
-
-        <div className="live-pill">
-          <span className="live-dot" />
-          Gyvas sporto radaras
-        </div>
-      </div>
+      <Link href="/" className="brandmark" aria-label="Sporto redakcija – pradinis puslapis">
+        <span className="brandmark-badge">SR</span>
+        <span className="brandmark-copy">
+          <strong>Sporto redakcija</strong>
+          <small>Lietuvos sporto pulsas</small>
+        </span>
+      </Link>
 
       <div className="header-tools">
         <label className="search-shell" aria-label="Paieška">
-          <span>⌕</span>
-          <input placeholder="Ieškoti klubų, federacijų, turnyrų..." />
+          <span aria-hidden="true">⌕</span>
+          <input placeholder="Ieškoti naujienų" />
         </label>
+        <a className="radar-link" href="#radaras">
+          <span className="live-dot" />
+          Gyvas radaras
+        </a>
         <a className="submit-button" href="mailto:news@sicenterhub.com">
           Siųsti naujieną
         </a>
@@ -249,18 +246,20 @@ export function HeroShowcase({
 
       <aside className="headlines-panel">
         <div className="headlines-top">
-          <h3>Headlines</h3>
-          <a href="#naujienos">Žiūrėti daugiau</a>
+          <div>
+            <span className="section-kicker">Dabar</span>
+            <h3>Naujausia</h3>
+          </div>
+          <a href="#naujienos">Visos naujienos</a>
         </div>
 
         <div className="headlines-list">
-          {headlines.slice(0, 9).map((item, index) => (
+          {headlines.slice(0, 7).map((item) => (
             <Link key={item.id} href={`/${item.slug}`} className="headline-item">
-              <span className="headline-rank">{String(index + 1).padStart(2, "0")}</span>
-              <div>
+              <div className="headline-copy">
                 <span className={`tag small ${getSportClass(item.sport)}`}>{toTitle(item.sport)}</span>
                 <strong>{item.title}</strong>
-                <small>{formatTime(item.publishedAt, true)}</small>
+                <small>{formatTime(item.publishedAt)}</small>
               </div>
             </Link>
           ))}
@@ -287,10 +286,6 @@ export function NewsCard({
           </div>
           <h3>{item.title}</h3>
           <p>{item.summary}</p>
-          <div className="news-card-why">
-            <strong>Kodėl svarbu?</strong>
-            <span>{getWhyText(item)}</span>
-          </div>
           <div className="card-footer">
             <span>{item.sourceName}</span>
             {item.readTimeMinutes ? <span>{item.readTimeMinutes} min skaitymo</span> : null}
@@ -315,7 +310,7 @@ export function TopStoriesGrid({ items }: { items: FeedItem[] }) {
       <div className="block-head">
         <div>
           <span className="section-kicker">Svarbiausia šiandien</span>
-          <h2>Keturios temos, prie kurių verta sustoti pirmiausia</h2>
+          <h2>Dienos temos</h2>
         </div>
       </div>
 
@@ -356,15 +351,10 @@ export function SportRadarSidebar({
     <aside className="radar-panel">
       <div className="block-head radar-head">
         <div>
-          <span className="section-kicker">Gyvas srautas</span>
+          <span className="section-kicker live-kicker"><span className="live-dot" /> Gyvas srautas</span>
           <h2>{title}</h2>
         </div>
         <p>{description}</p>
-      </div>
-
-      <div className="radar-intro">
-        <strong>Kas čia rodoma?</strong>
-        <span>Trumpi signalai, AI įžvalgos ir temos, kurios gali virsti pilnais straipsniais.</span>
       </div>
 
       <div className="signals-list">
@@ -397,7 +387,7 @@ export function LatestNewsFeed({ items }: { items: FeedItem[] }) {
       <div className="block-head latest-head">
         <div>
           <span className="section-kicker">Naujausia</span>
-          <h2>Chronologinis naujienų srautas</h2>
+          <h2>Naujausios naujienos</h2>
         </div>
         <div className="filter-row">
           {filters.map((filter) => (
@@ -529,11 +519,13 @@ export function HomePortal({
       <Header />
       <SportCategoryNav />
 
-      <div className="main-grid">
+      <HeroShowcase featured={[hero, ...topStories].slice(0, 5)} headlines={latest} />
+
+      <TopStoriesGrid items={topStories} />
+
+      <div className="main-grid home-feed-grid" id="radaras">
         <div className="main-column">
-          <HeroShowcase featured={[hero, ...topStories].slice(0, 5)} headlines={latest} />
-          <TopStoriesGrid items={topStories} />
-          <div className="radar-mobile" id="radaras">
+          <div className="radar-mobile">
             <SportRadarSidebar items={radar} />
           </div>
           <LatestNewsFeed items={latest} />
