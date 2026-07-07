@@ -1,0 +1,30 @@
+export type FeedFormat = "short" | "article";
+export type FeedRiskLevel = "low" | "medium" | "high";
+
+export type FeedItem = {
+  id: string;
+  title: string;
+  summary: string;
+  bodyMarkdown?: string;
+  category: string;
+  sport: string;
+  sourceName: string;
+  sourceUrl?: string;
+  imageUrl?: string;
+  imageAlt?: string;
+  slug: string;
+  format: FeedFormat;
+  publishedAt: string;
+  readTimeMinutes?: number;
+  status?: "published" | "queued" | "draft" | "review";
+  label?: string;
+  lead?: string;
+  whyItMatters?: string;
+  priorityScore?: number;
+  shortNewsPossible?: boolean;
+  draftRecommended?: boolean;
+  riskLevel?: FeedRiskLevel;
+  possibleDuplicate?: boolean;
+  topicKey?: string;
+  featured?: boolean;
+};
