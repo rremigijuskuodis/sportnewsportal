@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { FeedItem } from "@/lib/types";
 
 type NavItem = {
@@ -166,6 +166,106 @@ export function HeroNews({ item }: { item: FeedItem }) {
           </p>
         </div>
       </div>
+    </section>
+  );
+}
+
+export function HeroShowcase({
+  featured,
+  headlines
+}: {
+  featured: FeedItem[];
+  headlines: FeedItem[];
+}) {
+  const items = featured.length ? featured : headlines;
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    if (items.length <= 1) return;
+
+    const interval = window.setInterval(() => {
+      setActiveIndex((current) => (current + 1) % items.length);
+    }, 5500);
+
+    return () => window.clearInterval(interval);
+  }, [items]);
+
+  if (!items.length) return null;
+
+  const activeItem = items[activeIndex];
+
+  return (
+    <section className="showcase-grid">
+      <div className="showcase-main">
+        <Link href={`/${activeItem.slug}`} className="showcase-visual">
+          {activeItem.imageUrl ? (
+            <img src={activeItem.imageUrl} alt={activeItem.imageAlt || activeItem.title} />
+          ) : (
+            <div className="image-fallback">
+              <span>Redakcijos atranka</span>
+            </div>
+          )}
+          <div className="showcase-overlay" />
+        </Link>
+
+        <div className="showcase-copy">
+          <div className="hero-meta">
+            <span className={`tag ${getSportClass(activeItem.sport)}`}>{toTitle(activeItem.sport)}</span>
+            <span className={`status-dot ${getStatusTone(activeItem)}`}>
+              Prioritetas {activeItem.priorityScore || 4}/5
+            </span>
+            <time dateTime={activeItem.publishedAt}>{formatDate(activeItem.publishedAt)}</time>
+          </div>
+
+          <span className="section-kicker light">Pagrindinė naujiena</span>
+          <h1>{activeItem.title}</h1>
+          <p className="hero-lead">{activeItem.lead || activeItem.summary}</p>
+
+          <div className="showcase-actions">
+            <Link href={`/${activeItem.slug}`} className="primary-link">
+              Skaityti daugiau
+            </Link>
+            <div className="hero-editor-note dark">
+              <strong>Kodėl verta atkreipti dėmesį?</strong>
+              <span>{getWhyText(activeItem)}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="showcase-tabs">
+          {items.map((item, index) => (
+            <button
+              key={item.id}
+              type="button"
+              className={`showcase-tab ${index === activeIndex ? "active" : ""}`}
+              onClick={() => setActiveIndex(index)}
+            >
+              <span>{toTitle(item.category || item.sport)}</span>
+              <strong>{item.title}</strong>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <aside className="headlines-panel">
+        <div className="headlines-top">
+          <h3>Headlines</h3>
+          <a href="#naujienos">Žiūrėti daugiau</a>
+        </div>
+
+        <div className="headlines-list">
+          {headlines.slice(0, 9).map((item, index) => (
+            <Link key={item.id} href={`/${item.slug}`} className="headline-item">
+              <span className="headline-rank">{String(index + 1).padStart(2, "0")}</span>
+              <div>
+                <span className={`tag small ${getSportClass(item.sport)}`}>{toTitle(item.sport)}</span>
+                <strong>{item.title}</strong>
+                <small>{formatTime(item.publishedAt, true)}</small>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </aside>
     </section>
   );
 }
@@ -431,7 +531,7 @@ export function HomePortal({
 
       <div className="main-grid">
         <div className="main-column">
-          <HeroNews item={hero} />
+          <HeroShowcase featured={[hero, ...topStories].slice(0, 5)} headlines={latest} />
           <TopStoriesGrid items={topStories} />
           <div className="radar-mobile" id="radaras">
             <SportRadarSidebar items={radar} />

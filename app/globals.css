@@ -242,6 +242,208 @@ img {
   gap: 18px;
 }
 
+.showcase-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) 340px;
+  gap: 18px;
+}
+
+.showcase-main,
+.headlines-panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.showcase-main {
+  position: relative;
+  min-height: 720px;
+  border-radius: 34px;
+  overflow: hidden;
+  background: #08111d;
+  color: #fff;
+}
+
+.showcase-visual {
+  position: absolute;
+  inset: 0;
+}
+
+.showcase-visual img,
+.showcase-visual .image-fallback {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.showcase-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(6, 13, 23, 0.22) 0%, rgba(6, 13, 23, 0.84) 72%, rgba(6, 13, 23, 0.98) 100%),
+    linear-gradient(90deg, rgba(6, 13, 23, 0.92) 0%, rgba(6, 13, 23, 0.36) 48%, rgba(6, 13, 23, 0.76) 100%);
+}
+
+.showcase-copy {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 100%;
+  padding: 40px 34px 170px;
+}
+
+.showcase-copy h1 {
+  margin: 14px 0 14px;
+  max-width: 11ch;
+  font-size: clamp(2.4rem, 5vw, 4.8rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+
+.section-kicker.light {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.showcase-copy .hero-lead,
+.showcase-copy .hero-meta {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.showcase-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+  align-items: stretch;
+}
+
+.hero-editor-note.dark {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.hero-editor-note.dark span {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.showcase-tabs {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0;
+  padding: 0 12px 12px;
+}
+
+.showcase-tab {
+  appearance: none;
+  border: 0;
+  border-top: 3px solid rgba(255, 255, 255, 0.22);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.78);
+  text-align: left;
+  padding: 14px 12px 0;
+  cursor: pointer;
+}
+
+.showcase-tab span {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 8px;
+}
+
+.showcase-tab strong {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  font-size: 0.92rem;
+  line-height: 1.35;
+}
+
+.showcase-tab.active {
+  border-top-color: #fff;
+  color: #fff;
+}
+
+.headlines-panel {
+  border-radius: 28px;
+  padding: 18px;
+  background: #fff;
+}
+
+.headlines-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.headlines-top h3 {
+  margin: 0;
+  font-size: 1.75rem;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
+.headlines-top a {
+  color: var(--blue);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.headlines-list {
+  display: grid;
+}
+
+.headline-item {
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.headline-item:last-child {
+  border-bottom: 0;
+}
+
+.headline-rank {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 800;
+  padding-top: 3px;
+}
+
+.headline-item div {
+  display: grid;
+  gap: 6px;
+}
+
+.headline-item strong {
+  line-height: 1.34;
+}
+
+.headline-item small {
+  color: var(--muted);
+}
+
+.tag.small {
+  width: fit-content;
+  padding: 5px 9px;
+  font-size: 0.72rem;
+}
+
 .hero-news {
   border-radius: 34px;
   padding: 22px;
@@ -711,6 +913,7 @@ img {
 @media (max-width: 1180px) {
   .main-grid,
   .article-layout,
+  .showcase-grid,
   .hero-news,
   .newsletter-box,
   .section-grid,
@@ -729,6 +932,10 @@ img {
 
   .article-sidebar {
     position: static;
+  }
+
+  .showcase-main {
+    min-height: 640px;
   }
 }
 
@@ -754,5 +961,18 @@ img {
 
   .newsletter-form {
     display: grid;
+  }
+
+  .showcase-copy {
+    padding: 26px 20px 132px;
+  }
+
+  .showcase-tabs {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .showcase-copy h1 {
+    max-width: none;
+    font-size: clamp(2rem, 10vw, 3.4rem);
   }
 }
