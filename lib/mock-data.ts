@@ -5,17 +5,18 @@ const today = "2026-07-07";
 export const mockShortFeed: FeedItem[] = [
   {
     id: "signal-1",
-    title: "LKL klubai pradeda dėlioti vasaros sudėtis, rinkoje daugėja lietuvių gynėjų",
-    summary: "Komandos ieško pigesnių rotacijos sprendimų, todėl liepos vidurys gali tapti aktyviausiu parašų laikotarpiu.",
-    bodyMarkdown: "LKL rinkoje ryškėja ankstyvi komplektacijos signalai. Klubai dar saugo biudžetus, tačiau lietuvių gynėjų rinka juda sparčiau nei tikėtasi.",
+    title: "LKL klubai dėlioja vasaros sudėtis: lietuvių gynėjų rinka juda sparčiau",
+    summary: "Klubai ieško pigesnių rotacijos sprendimų, todėl liepos vidurys gali tapti aktyviausiu parašų laikotarpiu.",
+    bodyMarkdown:
+      "LKL rinkoje ryškėja ankstyvi komplektacijos signalai. Klubai dar saugo biudžetus, tačiau lietuvių gynėjų rinka juda sparčiau nei tikėtasi.",
     category: "transferai",
     sport: "krepšinis",
     sourceName: "Sporto radaras",
-    slug: "lkl-klubai-pradeda-delioti-vasaros-sudetis",
+    slug: "lkl-klubai-delioja-vasaros-sudetis",
     format: "short",
     publishedAt: `${today}T14:18:00+03:00`,
     label: "Radaras",
-    whyItMatters: "Ankstyvi komplektacijos sprendimai dažnai parodo, kurie klubai turės aiškiausią sezoninį planą.",
+    whyItMatters: "Ankstyvi sprendimai dažnai išduoda, kurie klubai turi aiškiausią sezono planą.",
     priorityScore: 4,
     shortNewsPossible: true,
     draftRecommended: true,
@@ -24,8 +25,9 @@ export const mockShortFeed: FeedItem[] = [
   {
     id: "signal-2",
     title: "A lygos klubai aktyvina vasaros langą prieš lemiamą sezono atkarpą",
-    summary: "Kai kurios komandos ieško puolėjų, o kitos pirmiausia tvarkosi gynybos grandį.",
-    bodyMarkdown: "A lygoje artėjant lemiamai sezono daliai klubai pradeda ieškoti taškus duodančių žaidėjų ir labiau žiūri į trumpalaikį efektą.",
+    summary: "Vieni ieško puolėjų, kiti pirmiausia stiprina gynybos grandį ir trumpalaikį stabilumą.",
+    bodyMarkdown:
+      "A lygoje artėjant lemiamai sezono daliai klubai pradeda ieškoti greito efekto ir žaidėjų, kurie gali iškart įeiti į struktūrą.",
     category: "transferai",
     sport: "futbolas",
     sourceName: "Sporto radaras",
@@ -43,7 +45,8 @@ export const mockShortFeed: FeedItem[] = [
     id: "signal-3",
     title: "Vilniuje daugėja kalbų apie naują tarptautinį jaunimo turnyrą rudenį",
     summary: "Organizatoriai vertina partnerių susidomėjimą ir ieško platesnio miestų bei federacijų įsitraukimo.",
-    bodyMarkdown: "Jaunimo turnyro idėja Vilniuje įgauna pagreitį, nes organizatoriai jau kalba ne tik apie datą, bet ir apie regioninį mastą.",
+    bodyMarkdown:
+      "Jaunimo turnyro idėja Vilniuje įgauna pagreitį, nes organizatoriai jau kalba ne tik apie datą, bet ir apie regioninį mastą.",
     category: "renginiai",
     sport: "kitos sporto šakos",
     sourceName: "Sporto radaras",
@@ -51,7 +54,7 @@ export const mockShortFeed: FeedItem[] = [
     format: "short",
     publishedAt: `${today}T12:58:00+03:00`,
     label: "Renginiai",
-    whyItMatters: "Tokie turnyrai tampa įėjimo tašku naujiems partneriams ir sporto bendruomenėms.",
+    whyItMatters: "Tokie turnyrai tampa įėjimo tašku naujoms partnerystėms ir platesnei bendruomenei.",
     priorityScore: 3,
     shortNewsPossible: true,
     draftRecommended: false,
@@ -59,9 +62,10 @@ export const mockShortFeed: FeedItem[] = [
   },
   {
     id: "signal-4",
-    title: "Federacijos tikrina rudens kalendorių dubliavimus tarp regioninių startų",
+    title: "Federacijos tikrina rudens kalendoriaus dubliavimus tarp regioninių startų",
     summary: "Kelių sporto šakų bendruomenėse daugėja susidūrimų dėl datų ir savanorių resursų.",
-    bodyMarkdown: "Kalendoriaus dubliavimai jau tampa vadybiniu klausimu, nes tie patys miestai ir komandos nebegali išsidalinti savaitgalių.",
+    bodyMarkdown:
+      "Kalendoriaus dubliavimai tampa vadybiniu klausimu, nes tie patys miestai ir komandos nebegali išsidalinti savaitgalių.",
     category: "kalendorius",
     sport: "sporto vadyba",
     sourceName: "Sporto radaras",
@@ -69,7 +73,7 @@ export const mockShortFeed: FeedItem[] = [
     format: "short",
     publishedAt: `${today}T12:16:00+03:00`,
     label: "AI įžvalga",
-    whyItMatters: "Geras kalendorius tiesiogiai veikia dalyvių skaičių, transliacijas ir partnerių vertę.",
+    whyItMatters: "Geras kalendorius tiesiogiai veikia dalyvių skaičių, partnerių vertę ir renginių kokybę.",
     priorityScore: 3,
     shortNewsPossible: true,
     draftRecommended: true,
@@ -79,7 +83,8 @@ export const mockShortFeed: FeedItem[] = [
     id: "signal-5",
     title: "Lietuvos paplūdimio tinklinio poros renka taškus prieš svarbų tarptautinį etapą",
     summary: "Keli stabilūs rezultatai gali ženkliai pagerinti startines pozicijas kitose savaitėse.",
-    bodyMarkdown: "Paplūdimio tinklinio rinktinėms svarbus ne vien galutinis laimėjimas, bet ir ritmas prieš artimiausius tarptautinius etapus.",
+    bodyMarkdown:
+      "Paplūdimio tinklinio rinktinėms svarbus ne vien galutinis laimėjimas, bet ir ritmas prieš artimiausius tarptautinius etapus.",
     category: "rezultatai",
     sport: "kitos sporto šakos",
     sourceName: "Sporto radaras",
@@ -96,8 +101,9 @@ export const mockShortFeed: FeedItem[] = [
   {
     id: "signal-6",
     title: "Diskusijos dėl arenų užimtumo Kaune gali paliesti rudenio turnyrų organizatorius",
-    summary: "Jei grafikai nesusiderins, kai kuriems renginiams tektų ieškoti alternatyvių vietų.",
-    bodyMarkdown: "Arenų užimtumas tampa ne tik logistikos, bet ir pajamų klausimu, nes renginio vieta smarkiai keičia bilietų bei rėmėjų potencialą.",
+    summary: "Jei grafikai nesusiderins, daliai renginių gali tekti ieškoti alternatyvių vietų.",
+    bodyMarkdown:
+      "Arenų užimtumas tampa ne tik logistikos, bet ir pajamų klausimu, nes renginio vieta smarkiai keičia bilietų bei rėmėjų potencialą.",
     category: "infrastruktūra",
     sport: "sporto vadyba",
     sourceName: "Sporto radaras",
@@ -114,8 +120,9 @@ export const mockShortFeed: FeedItem[] = [
   {
     id: "signal-7",
     title: "U17 rinktinių vasaros ciklas kelia daugiau dėmesio regionų akademijoms",
-    summary: "Skautingas krypsta ne tik į didmiesčius, bet ir į mažesnius centrus.",
-    bodyMarkdown: "Jaunimo rinktinių ciklai padeda išryškinti ne vien pavardes, bet ir stipriau dirbančias regionų struktūras.",
+    summary: "Skautingas krypsta ne tik į didmiesčius, bet ir į mažesnius sporto centrus.",
+    bodyMarkdown:
+      "Jaunimo rinktinių ciklai padeda išryškinti ne vien pavardes, bet ir stipriau dirbančias regionų struktūras.",
     category: "jaunimas",
     sport: "futbolas",
     sourceName: "Sporto radaras",
@@ -131,9 +138,10 @@ export const mockShortFeed: FeedItem[] = [
   },
   {
     id: "signal-8",
-    title: "Partnerių rinkoje daugiau klausimų dėl sporto renginių matuojamos grąžos",
+    title: "Partnerių rinkoje daugėja klausimų dėl sporto renginių matuojamos grąžos",
     summary: "Rėmėjai nori aiškesnių skaičių apie auditoriją, įsitraukimą ir ilgalaikį poveikį.",
-    bodyMarkdown: "Sporto projektams vis dažniau reikia ne vien idėjos, bet ir aiškiai pamatuojamos vertės rėmėjams bei miestams.",
+    bodyMarkdown:
+      "Sporto projektams vis dažniau reikia ne vien idėjos, bet ir aiškiai pamatuojamos vertės rėmėjams bei miestams.",
     category: "partnerystės",
     sport: "sporto vadyba",
     sourceName: "Sporto radaras",
@@ -154,7 +162,7 @@ export const mockArticleFeed: FeedItem[] = [
     id: "article-1",
     title: "Lietuvos sporto naujienų portalai keičiasi: greitis lieka, bet svarbiausia tampa aiškumas",
     summary: "Auditorija nori ne triukšmo, o patikimai sudėliotos dienos sporto darbotvarkės — nuo rezultatų iki vadybinių signalų.",
-    lead: "Naujos kartos sporto portalui neužtenka vien greitai perkelti antraštę. Jam reikia atsirinkti, kas svarbu, ir tai pateikti švariai, suprantamai bei patogiai skaityti.",
+    lead: "Naujos kartos sporto portalui neužtenka vien greitai perkelti antraštę. Reikia atsirinkti, kas svarbu, ir tai pateikti švariai bei patogiai skaityti.",
     bodyMarkdown:
       "Lietuvos sporto informacijos lauke daugėja ne tik naujienų, bet ir triukšmo. Dėl to skaitytojas vis dažniau ieško ne didesnio kiekio, o geresnės atrankos.\n\n" +
       "Būtent todėl modernus sporto portalas turi derinti du sluoksnius: greitą radarą, kuris leidžia sekti dienos pulsą, ir pilnus straipsnius, kurie suteikia kontekstą, kryptį bei pasitikėjimą.\n\n" +

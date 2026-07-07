@@ -20,6 +20,7 @@ export function preparePortalData(articleFeed: FeedItem[], shortFeed: FeedItem[]
       (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
     )
   );
+
   const radar = getVisibleItems(
     [...shortFeed]
       .filter((item) => item.shortNewsPossible !== false)
@@ -31,6 +32,7 @@ export function preparePortalData(articleFeed: FeedItem[], shortFeed: FeedItem[]
     .filter((item) => item.id !== hero?.id && (item.priorityScore || 0) >= 4)
     .slice(0, 4);
   const latest = articles.filter((item) => item.id !== hero?.id);
+
   const groups = [
     {
       title: "Krepšinis",
