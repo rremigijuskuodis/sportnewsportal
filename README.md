@@ -1,5 +1,7 @@
 # SicenterHub News
 
+Deployment sync marker: 2026-07-07
+
 Pirma sporto naujienų portalo versija, paruošta Vercel + Supabase architektūrai.
 
 ## Ką šis karkasas daro
