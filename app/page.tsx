@@ -10,7 +10,12 @@ export default async function HomePage() {
   );
 
   if (!hero) {
-    return null;
+    return (
+      <main style={{ padding: 24, fontFamily: "Inter, sans-serif" }}>
+        Nepavyko užkrauti portalo turinio. Patikrinkite Supabase duomenis arba pabandykite
+        perkrauti puslapį.
+      </main>
+    );
   }
 
   return (

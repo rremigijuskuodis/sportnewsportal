@@ -61,6 +61,10 @@ async function fetchSupabaseRows(format: "short" | "article") {
   }
 
   const rows = (await response.json()) as SupabaseArticleRow[];
+  if (!rows.length) {
+    return format === "short" ? mockShortFeed : mockArticleFeed;
+  }
+
   return rows.map((row) => normalizeRow(row, format));
 }
 
@@ -99,6 +103,13 @@ export async function loadPortalFeed() {
     fetchSupabaseRows("short"),
     fetchSupabaseRows("article")
   ]);
+
+  if (!articleFeed.length && !shortFeed.length) {
+    return {
+      shortFeed: mockShortFeed,
+      articleFeed: mockArticleFeed
+    };
+  }
 
   return {
     shortFeed,
