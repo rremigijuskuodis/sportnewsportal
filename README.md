@@ -22,6 +22,10 @@ Pirma sporto naujienų portalo versija, paruošta Vercel + Supabase architektūr
 
 Įkelk `supabase/schema.sql` į Supabase SQL editorių.
 
+AI Sporto radaro atnaujinimui esamame projekte vieną kartą paleisk
+`supabase/radar-ai-migration.sql`. Pilni AI straipsniai publikuojami kaip
+`article`, o paketais generuojami gyvi radaro signalai – kaip `short`.
+
 Svarbūs stulpeliai:
 
 - `format` = `short` arba `article`
