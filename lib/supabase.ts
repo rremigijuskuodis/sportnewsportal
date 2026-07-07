@@ -25,6 +25,7 @@ type SupabaseArticleRow = {
   risk_level: "low" | "medium" | "high" | null;
   possible_duplicate: boolean | null;
   why_it_matters: string | null;
+  practical_action: string | null;
 };
 
 function getSupabaseEnv() {
@@ -90,6 +91,7 @@ function normalizeRow(row: SupabaseArticleRow, format: "short" | "article"): Fee
     label: row.label || undefined,
     lead: row.lead || summary,
     whyItMatters: row.why_it_matters || summary,
+    practicalAction: row.practical_action || undefined,
     priorityScore: row.priority_score ?? (format === "article" ? 4 : 3),
     shortNewsPossible: row.short_news_possible ?? format === "short",
     draftRecommended: row.draft_recommended ?? format === "article",

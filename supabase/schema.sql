@@ -13,6 +13,14 @@ create table if not exists public.articles (
   format text not null check (format in ('short', 'article')),
   status text not null default 'published',
   label text,
+  lead text,
+  priority_score integer,
+  risk_level text default 'low',
+  short_news_possible boolean default false,
+  draft_recommended boolean default false,
+  possible_duplicate boolean default false,
+  why_it_matters text,
+  practical_action text,
   source_name text not null default 'SicenterHub',
   source_url text,
   image_url text,
@@ -26,6 +34,15 @@ create table if not exists public.articles (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+alter table public.articles add column if not exists lead text;
+alter table public.articles add column if not exists priority_score integer;
+alter table public.articles add column if not exists risk_level text default 'low';
+alter table public.articles add column if not exists short_news_possible boolean default false;
+alter table public.articles add column if not exists draft_recommended boolean default false;
+alter table public.articles add column if not exists possible_duplicate boolean default false;
+alter table public.articles add column if not exists why_it_matters text;
+alter table public.articles add column if not exists practical_action text;
 
 create index if not exists articles_status_format_published_at_idx
   on public.articles (status, format, published_at desc);

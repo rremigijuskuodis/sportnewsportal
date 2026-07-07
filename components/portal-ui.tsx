@@ -324,6 +324,9 @@ export function TopStoriesGrid({ items }: { items: FeedItem[] }) {
 }
 
 export function ShortSignalCard({ item }: { item: FeedItem }) {
+  const whyText = getWhyText(item);
+  const showWhy = Boolean(whyText && whyText.trim() !== item.summary.trim());
+
   return (
     <article className="signal-card">
       <div className="signal-topline">
@@ -333,7 +336,19 @@ export function ShortSignalCard({ item }: { item: FeedItem }) {
       <Link href={`/${item.slug}`}>
         <h4>{item.title}</h4>
       </Link>
-      <p>{getWhyText(item)}</p>
+      <p className="signal-summary">{item.summary}</p>
+      {showWhy ? (
+        <div className="signal-insight">
+          <strong>Kodėl svarbu?</strong>
+          <span>{whyText}</span>
+        </div>
+      ) : null}
+      {item.practicalAction ? (
+        <div className="signal-action">
+          <strong>Ką stebėti?</strong>
+          <span>{item.practicalAction}</span>
+        </div>
+      ) : null}
     </article>
   );
 }
@@ -519,7 +534,7 @@ export function HomePortal({
       <Header />
       <SportCategoryNav />
 
-      <HeroShowcase featured={[hero, ...topStories].slice(0, 5)} headlines={latest} />
+      <HeroShowcase featured={[hero, ...latest].slice(0, 5)} headlines={latest} />
 
       <TopStoriesGrid items={topStories} />
 

@@ -20,6 +20,7 @@ export type FeedItem = {
   label?: string;
   lead?: string;
   whyItMatters?: string;
+  practicalAction?: string;
   priorityScore?: number;
   shortNewsPossible?: boolean;
   draftRecommended?: boolean;
