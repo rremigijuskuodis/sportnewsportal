@@ -12,6 +12,10 @@ type SupabaseArticleRow = {
   source_url: string | null;
   image_url: string | null;
   image_alt: string | null;
+  image_page_url: string | null;
+  image_author: string | null;
+  image_license: string | null;
+  image_license_url: string | null;
   slug: string | null;
   format: "short" | "article" | null;
   published_at: string | null;
@@ -33,20 +37,6 @@ function getSupabaseEnv() {
     url: process.env.SUPABASE_URL || "",
     anonKey: process.env.SUPABASE_ANON_KEY || ""
   };
-}
-
-function getFallbackArticleImage(sport: string | null) {
-  const value = String(sport || "").toLowerCase();
-  if (value.includes("krep") || value.includes("basket")) {
-    return "https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=1600&q=82";
-  }
-  if (value.includes("fut") || value.includes("foot")) {
-    return "https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=1600&q=82";
-  }
-  if (value.includes("vady") || value.includes("management")) {
-    return "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1600&q=82";
-  }
-  return "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=1600&q=82";
 }
 
 async function fetchSupabaseRows(format: "short" | "article") {
@@ -94,8 +84,12 @@ function normalizeRow(row: SupabaseArticleRow, format: "short" | "article"): Fee
     sport: row.sport || "kitos sporto šakos",
     sourceName: row.source_name || "SicenterHub",
     sourceUrl: row.source_url || undefined,
-    imageUrl: row.image_url || (format === "article" ? getFallbackArticleImage(row.sport) : undefined),
-    imageAlt: row.image_alt || (format === "article" ? `${row.sport || "Sporto"} naujienos iliustracija` : undefined),
+    imageUrl: row.image_url || undefined,
+    imageAlt: row.image_alt || undefined,
+    imagePageUrl: row.image_page_url || undefined,
+    imageAuthor: row.image_author || undefined,
+    imageLicense: row.image_license || undefined,
+    imageLicenseUrl: row.image_license_url || undefined,
     bodyMarkdown: row.body_markdown || summary,
     slug: row.slug || row.id,
     format,

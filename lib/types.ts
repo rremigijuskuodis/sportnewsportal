@@ -12,6 +12,10 @@ export type FeedItem = {
   sourceUrl?: string;
   imageUrl?: string;
   imageAlt?: string;
+  imagePageUrl?: string;
+  imageAuthor?: string;
+  imageLicense?: string;
+  imageLicenseUrl?: string;
   slug: string;
   format: FeedFormat;
   publishedAt: string;

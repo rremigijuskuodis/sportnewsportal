@@ -706,7 +706,11 @@ img {
 }
 
 .news-card.compact .news-card-link {
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr) 150px;
+}
+
+.news-card.compact .news-card-image {
+  height: 120px;
 }
 
 .news-card h3,
@@ -943,6 +947,14 @@ img {
   border-radius: 20px;
   background: var(--surface-muted);
   padding: 16px;
+  overflow: hidden;
+}
+
+.event-card-image {
+  width: calc(100% + 32px);
+  height: 170px;
+  margin: -16px -16px 14px;
+  object-fit: cover;
 }
 
 .event-card strong {
@@ -977,6 +989,13 @@ img {
 
 .event-details p {
   margin-top: 12px;
+}
+
+.event-details a {
+  display: inline-flex;
+  margin-top: 10px;
+  color: var(--blue);
+  font-weight: 750;
 }
 
 .home-main-column {
@@ -1030,7 +1049,26 @@ img {
 
 .article-hero-image {
   margin-top: 22px;
+  width: 100%;
+  height: clamp(280px, 42vw, 520px);
   max-height: 520px;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.article-image-figure {
+  margin: 0;
+}
+
+.article-image-figure figcaption {
+  padding: 9px 4px 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.article-image-figure figcaption a {
+  color: var(--blue);
 }
 
 .why-box {
@@ -1135,6 +1173,7 @@ img {
   }
 
   .news-card-link,
+  .news-card.compact .news-card-link,
   .hero-news,
   .newsletter-form {
     grid-template-columns: 1fr;

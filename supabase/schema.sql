@@ -25,6 +25,10 @@ create table if not exists public.articles (
   source_url text,
   image_url text,
   image_alt text,
+  image_page_url text,
+  image_author text,
+  image_license text,
+  image_license_url text,
   source_note text,
   research_urls text[] not null default '{}',
   social_facebook text,
@@ -43,6 +47,10 @@ alter table public.articles add column if not exists draft_recommended boolean d
 alter table public.articles add column if not exists possible_duplicate boolean default false;
 alter table public.articles add column if not exists why_it_matters text;
 alter table public.articles add column if not exists practical_action text;
+alter table public.articles add column if not exists image_page_url text;
+alter table public.articles add column if not exists image_author text;
+alter table public.articles add column if not exists image_license text;
+alter table public.articles add column if not exists image_license_url text;
 
 create index if not exists articles_status_format_published_at_idx
   on public.articles (status, format, published_at desc);

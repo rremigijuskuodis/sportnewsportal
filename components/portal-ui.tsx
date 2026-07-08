@@ -20,6 +20,8 @@ type EventItem = {
   dateLabel: string;
   place: string;
   description: string;
+  href: string;
+  imageUrl?: string;
 };
 
 const defaultSports: NavItem[] = [
@@ -46,6 +48,31 @@ function formatDate(value: string) {
 }
 
 function toTitle(value: string) {
+  const normalized = value.toLowerCase().trim();
+  const labels: Record<string, string> = {
+    basketball: "Krepšinis",
+    football: "Futbolas",
+    soccer: "Futbolas",
+    volleyball: "Tinklinis",
+    handball: "Rankinis",
+    futsal: "Futsalas",
+    canoe_kayak: "Baidarės ir kanojos",
+    athletics: "Lengvoji atletika",
+    swimming: "Plaukimas",
+    tennis: "Tenisas",
+    cycling: "Dviračių sportas",
+    multi_sport: "Įvairios sporto šakos",
+    result: "Rezultatas",
+    news: "Naujienos",
+    interview: "Interviu",
+    analysis: "Analizė",
+    event: "Renginys",
+    events: "Renginiai",
+    broadcast: "Transliacija",
+    management: "Sporto vadyba"
+  };
+  if (labels[normalized]) return labels[normalized];
+
   return value
     .replaceAll("_", " ")
     .replaceAll("-", " ")
@@ -278,12 +305,8 @@ export function NewsCard({
           </div>
         </div>
 
-        {!compact ? (
-          item.imageUrl ? (
-            <img src={item.imageUrl} alt={item.imageAlt || item.title} className="news-card-image" />
-          ) : (
-            <div className="news-card-image placeholder" />
-          )
+        {item.imageUrl ? (
+          <img src={item.imageUrl} alt={item.imageAlt || item.title} className="news-card-image" />
         ) : null}
       </Link>
     </article>
@@ -446,6 +469,8 @@ export function RelatedNews({ items }: { items: FeedItem[] }) {
 }
 
 export function EventCalendarPreview({ items }: { items: EventItem[] }) {
+  if (!items.length) return null;
+
   return (
     <section className="content-block" id="renginiai">
       <div className="block-head">
@@ -458,12 +483,14 @@ export function EventCalendarPreview({ items }: { items: EventItem[] }) {
       <div className="event-list">
         {items.map((item) => (
           <article key={item.title} className="event-card">
+            {item.imageUrl ? <img src={item.imageUrl} alt={item.title} className="event-card-image" /> : null}
             <strong>{item.dateLabel}</strong>
             <h3>{item.title}</h3>
-            <p>{item.place}</p>
+            <p>Šaltinis: {item.place}</p>
             <details className="event-details">
               <summary>Daugiau informacijos</summary>
               <p>{item.description}</p>
+              <a href={item.href} target="_blank" rel="noreferrer">Atidaryti renginio šaltinį</a>
             </details>
           </article>
         ))}
@@ -593,7 +620,14 @@ export function ArticlePage({
           </div>
 
           {item.imageUrl ? (
-            <img className="article-hero-image" src={item.imageUrl} alt={item.imageAlt || item.title} />
+            <figure className="article-image-figure">
+              <img className="article-hero-image" src={item.imageUrl} alt={item.imageAlt || item.title} />
+              <figcaption>
+                Nuotrauka: {item.imageAuthor || item.sourceName}
+                {item.imagePageUrl ? <> · <a href={item.imagePageUrl} target="_blank" rel="noreferrer">šaltinis</a></> : null}
+                {item.imageLicense ? <> · {item.imageLicense}</> : null}
+              </figcaption>
+            </figure>
           ) : null}
 
           <WhyItMattersBox text={getWhyText(item)} />

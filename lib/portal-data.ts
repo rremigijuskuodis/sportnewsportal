@@ -61,26 +61,23 @@ export function preparePortalData(articleFeed: FeedItem[], shortFeed: FeedItem[]
     }
   ].filter((group) => group.items.length > 0);
 
-  const events = [
-    {
-      title: "Tarptautinis jaunimo turnyras",
-      dateLabel: "Liepos 18",
-      place: "Vilnius",
-      description: "Jaunimo komandas, trenerius ir sporto bendruomenę subursiantis tarptautinis turnyras. Tiksli programa ir dalyvių sąrašas bus papildyti organizatoriams paskelbus informaciją."
-    },
-    {
-      title: "3x3 savaitgalio etapas",
-      dateLabel: "Liepos 21",
-      place: "Kaunas",
-      description: "Atviras 3x3 krepšinio savaitgalis su keliomis amžiaus grupėmis ir bendruomenės veiklomis. Registracijos bei tvarkaraščio informacija bus atnaujinta prieš renginį."
-    },
-    {
-      title: "Federacijų rudens kalendoriaus forumas",
-      dateLabel: "Liepos 25",
-      place: "Online / Vilnius",
-      description: "Darbinė sporto organizacijų sesija apie rudens renginių datas, auditorijų persidengimą ir bendras komunikacijos galimybes. Prisijungimo informacija bus paskelbta vėliau."
-    }
-  ];
+  const eventDateFormatter = new Intl.DateTimeFormat("lt-LT", { month: "long", day: "numeric" });
+  const events = getVisibleItems([...articleFeed, ...shortFeed])
+    .filter((item) => {
+      const category = item.category.toLowerCase();
+      return category.includes("event") || category.includes("rengin") || category.includes("broadcast");
+    })
+    .filter((item) => Boolean(item.sourceUrl))
+    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+    .slice(0, 6)
+    .map((item) => ({
+      title: item.title,
+      dateLabel: eventDateFormatter.format(new Date(item.publishedAt)),
+      place: item.sourceName,
+      description: item.summary,
+      href: item.sourceUrl || `/${item.slug}`,
+      imageUrl: item.imageUrl
+    }));
 
   return { hero, important, latest, radar, groups, events };
 }
