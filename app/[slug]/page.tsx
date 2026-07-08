@@ -19,13 +19,9 @@ export default async function SlugPage({
 
   const related = articleFeed
     .filter((entry) => entry.slug !== item.slug)
-    .filter(
-      (entry) =>
-        entry.sport === item.sport ||
-        entry.category === item.category ||
-        entry.priorityScore === item.priorityScore
-    )
-    .slice(0, 3);
+    .filter((entry) => Boolean(entry.imageUrl))
+    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+    .slice(0, 5);
 
   return <ArticlePage item={item} related={related} radar={radar} />;
 }

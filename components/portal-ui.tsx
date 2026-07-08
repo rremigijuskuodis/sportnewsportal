@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import type { FeedItem } from "@/lib/types";
 
@@ -102,6 +103,23 @@ function getStatusTone(item: FeedItem) {
 
 function getWhyText(item: FeedItem) {
   return item.whyItMatters || item.lead || item.summary;
+}
+
+function useLiveRefresh(intervalMs = 75000) {
+  const router = useRouter();
+
+  useEffect(() => {
+    const refreshVisiblePage = () => {
+      if (document.visibilityState === "visible") router.refresh();
+    };
+    const interval = window.setInterval(refreshVisiblePage, intervalMs);
+    document.addEventListener("visibilitychange", refreshVisiblePage);
+
+    return () => {
+      window.clearInterval(interval);
+      document.removeEventListener("visibilitychange", refreshVisiblePage);
+    };
+  }, [intervalMs, router]);
 }
 
 export function Header() {
@@ -366,15 +384,21 @@ export function SportRadarSidebar({
   items,
   title = "Sporto radaras",
   description = "Trumpi signalai, kurie leidžia suprasti dienos pulsą",
-  compact = false
+  compact = false,
+  maxItems,
+  scrollable = false
 }: {
   items: FeedItem[];
   title?: string;
   description?: string;
   compact?: boolean;
+  maxItems?: number;
+  scrollable?: boolean;
 }) {
+  const itemLimit = maxItems || (compact ? 3 : 10);
+
   return (
-    <aside id="radaras" className={`radar-panel ${compact ? "compact" : ""}`}>
+    <aside id="radaras" className={`radar-panel ${compact ? "compact" : ""} ${scrollable ? "scrollable" : ""}`}>
       <div className="block-head radar-head">
         <div>
           <span className="section-kicker live-kicker"><span className="live-dot" /> Gyvas srautas</span>
@@ -384,7 +408,7 @@ export function SportRadarSidebar({
       </div>
 
       <div className="signals-list">
-        {items.slice(0, compact ? 3 : 10).map((item) => (
+        {items.slice(0, itemLimit).map((item) => (
           <ShortSignalCard key={item.id} item={item} />
         ))}
       </div>
@@ -454,13 +478,13 @@ export function RelatedNews({ items }: { items: FeedItem[] }) {
     <section className="content-block compact-block">
       <div className="block-head">
         <div>
-          <span className="section-kicker">Susijusios naujienos</span>
-          <h2>Tęsk skaitymą</h2>
+          <span className="section-kicker">Naujausia</span>
+          <h2>Kitos naujienos</h2>
         </div>
       </div>
 
       <div className="related-list">
-        {items.map((item) => (
+        {items.slice(0, 5).map((item) => (
           <NewsCard key={item.id} item={item} compact />
         ))}
       </div>
@@ -548,6 +572,8 @@ export function HomePortal({
   sections: CategorySection[];
   events: EventItem[];
 }) {
+  useLiveRefresh();
+
   const featuredItems = [hero, ...latest]
     .filter((item, index, items) => Boolean(item.imageUrl) && items.findIndex((candidate) => candidate.id === item.id) === index)
     .slice(0, 5);
@@ -603,6 +629,8 @@ export function ArticlePage({
   related: FeedItem[];
   radar: FeedItem[];
 }) {
+  useLiveRefresh();
+
   return (
     <main className="page-shell article-shell">
       <Header />
@@ -645,6 +673,8 @@ export function ArticlePage({
             items={radar}
             title="Sporto radaras"
             description="Temos, kurios šiandien juda greičiausiai ir gali išaugti į didesnes istorijas"
+            maxItems={5}
+            scrollable
           />
         </aside>
       </div>
