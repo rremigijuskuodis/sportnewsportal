@@ -19,6 +19,7 @@ export async function POST(request: NextRequest) {
     body: JSON.stringify({
       email: ADMIN_EMAIL,
       create_user: true,
+      email_redirect_to: redirectTo,
       options: { email_redirect_to: redirectTo }
     }),
     cache: "no-store"
@@ -30,4 +31,3 @@ export async function POST(request: NextRequest) {
   }
   return NextResponse.json({ ok: true });
 }
-

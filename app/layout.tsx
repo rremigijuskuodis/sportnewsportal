@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { AdminAuthFragmentBridge } from "@/components/admin-auth-fragment-bridge";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -26,7 +27,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="lt">
-      <body>{children}</body>
+      <body>
+        <AdminAuthFragmentBridge />
+        {children}
+      </body>
     </html>
   );
 }

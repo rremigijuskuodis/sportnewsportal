@@ -1496,3 +1496,12 @@ img {
   .admin-panel { padding: 18px; }
   .admin-login-card { padding: 24px; }
 }
+.admin-auth-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(244, 247, 252, 0.96);
+}
