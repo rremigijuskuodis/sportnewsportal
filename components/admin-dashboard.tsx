@@ -41,6 +41,19 @@ type PortalSettings = {
   minimum_priority: number;
 };
 
+const defaultSettings: PortalSettings = {
+  automation_enabled: true,
+  article_interval_hours: 6,
+  articles_per_day: 2,
+  articles_per_run: 1,
+  article_model: "gpt-5.4-mini",
+  radar_enabled: true,
+  radar_interval_minutes: 120,
+  radar_model: "gpt-5.4-mini",
+  auto_approve_enabled: true,
+  minimum_priority: 3
+};
+
 const emptyArticle: Partial<AdminArticle> = {
   title: "", summary: "", lead: "", body_markdown: "", category: "news", sport: "multi_sport",
   status: "draft", priority_score: 3, risk_level: "low", why_it_matters: "",
@@ -54,6 +67,7 @@ export function AdminDashboard() {
   const [articles, setArticles] = useState<AdminArticle[]>([]);
   const [draft, setDraft] = useState<Partial<AdminArticle>>(emptyArticle);
   const [settings, setSettings] = useState<PortalSettings | null>(null);
+  const [settingsError, setSettingsError] = useState("");
   const [message, setMessage] = useState("Kraunama…");
   const [busy, setBusy] = useState(false);
 
@@ -67,7 +81,13 @@ export function AdminDashboard() {
     if (articleResponse.ok) setArticles(await articleResponse.json());
     if (settingsResponse.ok) {
       const values = await settingsResponse.json();
-      setSettings(values[0] || null);
+      const saved = Array.isArray(values) ? values[0] : values;
+      setSettings({ ...defaultSettings, ...(saved || {}) });
+      setSettingsError(saved ? "" : "Nustatymų eilutės dar nebuvo – išsaugant ji bus sukurta automatiškai.");
+    } else {
+      const error = await settingsResponse.json().catch(() => ({}));
+      setSettings({ ...defaultSettings });
+      setSettingsError(error.message || error.error || "Nepavyko pasiekti automatikos nustatymų lentelės.");
     }
     setMessage("");
   }
@@ -114,7 +134,16 @@ export function AdminDashboard() {
     const response = await fetch("/api/admin/settings", {
       method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(settings)
     });
-    setMessage(response.ok ? "Automatikos nustatymai išsaugoti." : "Nustatymų išsaugoti nepavyko.");
+    const data = await response.json().catch(() => ({}));
+    if (response.ok) {
+      const saved = Array.isArray(data) ? data[0] : data;
+      if (saved) setSettings({ ...defaultSettings, ...saved });
+      setSettingsError("");
+      setMessage("Automatikos nustatymai išsaugoti.");
+    } else {
+      setSettingsError(data.message || data.error || "Nustatymų išsaugoti nepavyko.");
+      setMessage("Nustatymų išsaugoti nepavyko.");
+    }
     setBusy(false);
   }
 
@@ -174,6 +203,7 @@ export function AdminDashboard() {
       {tab === "settings" && settings ? (
         <form className="admin-panel" onSubmit={saveSettings}>
           <div className="admin-panel-head"><div><h2>Automatikos nustatymai</h2><p>Trigeriai tikrina dažniau, bet vykdo darbus pagal šiuos limitus.</p></div><button className="admin-primary" disabled={busy}>Išsaugoti</button></div>
+          {settingsError ? <div className="admin-warning"><strong>Nustatymų būsena</strong><span>{settingsError}</span></div> : null}
           <div className="admin-form-grid">
             <label className="admin-check"><input type="checkbox" checked={settings.automation_enabled} onChange={(e) => setSettings({...settings, automation_enabled:e.target.checked})} /> Generuoti straipsnius automatiškai</label>
             <label>Generavimo intervalas (val.)<input type="number" min="1" max="24" value={settings.article_interval_hours} onChange={(e) => setSettings({...settings, article_interval_hours:Number(e.target.value)})} /></label>

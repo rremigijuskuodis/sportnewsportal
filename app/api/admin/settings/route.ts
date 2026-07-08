@@ -18,12 +18,15 @@ export async function GET(request: NextRequest) {
 
 export async function PATCH(request: NextRequest) {
   const input = (await request.json().catch(() => ({}))) as Record<string, unknown>;
-  const patch: Record<string, unknown> = { updated_at: new Date().toISOString() };
+  const patch: Record<string, unknown> = {
+    id: "portal",
+    updated_at: new Date().toISOString()
+  };
   for (const [key, value] of Object.entries(input)) if (settingFields.has(key)) patch[key] = value;
 
-  const result = await adminRestFetch(request, "/rest/v1/portal_settings?id=eq.portal", {
-    method: "PATCH",
-    headers: { Prefer: "return=representation" },
+  const result = await adminRestFetch(request, "/rest/v1/portal_settings?on_conflict=id", {
+    method: "POST",
+    headers: { Prefer: "resolution=merge-duplicates,return=representation" },
     body: JSON.stringify(patch)
   });
   if (!result.user) return NextResponse.json({ error: "Neprisijungta." }, { status: 401 });
@@ -32,4 +35,3 @@ export async function PATCH(request: NextRequest) {
     headers: { "Content-Type": "application/json" }
   });
 }
-

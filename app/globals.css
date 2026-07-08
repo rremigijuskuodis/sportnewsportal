@@ -1505,3 +1505,15 @@ img {
   padding: 24px;
   background: rgba(244, 247, 252, 0.96);
 }
+
+.admin-warning {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 0 22px;
+  padding: 14px 16px;
+  border: 1px solid #f2c66d;
+  border-radius: 12px;
+  background: #fff8e8;
+  color: #6c4811;
+}
