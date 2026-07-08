@@ -16,6 +16,8 @@ type SupabaseArticleRow = {
   image_author: string | null;
   image_license: string | null;
   image_license_url: string | null;
+  image_focus_x: number | null;
+  image_focus_y: number | null;
   slug: string | null;
   format: "short" | "article" | null;
   published_at: string | null;
@@ -24,6 +26,7 @@ type SupabaseArticleRow = {
   label: string | null;
   lead: string | null;
   priority_score: number | null;
+  is_featured: boolean | null;
   short_news_possible: boolean | null;
   draft_recommended: boolean | null;
   risk_level: "low" | "medium" | "high" | null;
@@ -90,6 +93,8 @@ function normalizeRow(row: SupabaseArticleRow, format: "short" | "article"): Fee
     imageAuthor: row.image_author || undefined,
     imageLicense: row.image_license || undefined,
     imageLicenseUrl: row.image_license_url || undefined,
+    imageFocusX: row.image_focus_x ?? 50,
+    imageFocusY: row.image_focus_y ?? 30,
     bodyMarkdown: row.body_markdown || summary,
     slug: row.slug || row.id,
     format,
@@ -101,6 +106,7 @@ function normalizeRow(row: SupabaseArticleRow, format: "short" | "article"): Fee
     whyItMatters: row.why_it_matters || summary,
     practicalAction: row.practical_action || undefined,
     priorityScore: row.priority_score ?? (format === "article" ? 4 : 3),
+    isFeatured: row.is_featured || false,
     shortNewsPossible: row.short_news_possible ?? format === "short",
     draftRecommended: row.draft_recommended ?? format === "article",
     riskLevel: row.risk_level || "low",

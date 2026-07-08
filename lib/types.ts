@@ -16,6 +16,8 @@ export type FeedItem = {
   imageAuthor?: string;
   imageLicense?: string;
   imageLicenseUrl?: string;
+  imageFocusX?: number;
+  imageFocusY?: number;
   slug: string;
   format: FeedFormat;
   publishedAt: string;
@@ -26,6 +28,7 @@ export type FeedItem = {
   whyItMatters?: string;
   practicalAction?: string;
   priorityScore?: number;
+  isFeatured?: boolean;
   shortNewsPossible?: boolean;
   draftRecommended?: boolean;
   riskLevel?: FeedRiskLevel;

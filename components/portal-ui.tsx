@@ -229,7 +229,11 @@ export function HeroShowcase({
       <div className="showcase-main">
         <Link href={`/${activeItem.slug}`} className="showcase-visual">
           {activeItem.imageUrl ? (
-            <img src={activeItem.imageUrl} alt={activeItem.imageAlt || activeItem.title} />
+            <img
+              src={activeItem.imageUrl}
+              alt={activeItem.imageAlt || activeItem.title}
+              style={{ objectPosition: `${activeItem.imageFocusX ?? 50}% ${activeItem.imageFocusY ?? 30}%` }}
+            />
           ) : (
             <div className="image-fallback">
               <span>Redakcijos atranka</span>
@@ -560,6 +564,7 @@ export function HomePortal({
 
   const featuredItems = [hero, ...latest]
     .filter((item, index, items) => Boolean(item.imageUrl) && items.findIndex((candidate) => candidate.id === item.id) === index)
+    .sort((a, b) => Number(Boolean(b.isFeatured)) - Number(Boolean(a.isFeatured)))
     .slice(0, 5);
   const featuredIds = new Set(featuredItems.map((item) => item.id));
   const olderItems = latest.filter((item) => item.imageUrl && !featuredIds.has(item.id));
@@ -633,7 +638,12 @@ export function ArticlePage({
 
           {item.imageUrl ? (
             <figure className="article-image-figure">
-              <img className="article-hero-image" src={item.imageUrl} alt={item.imageAlt || item.title} />
+              <img
+                className="article-hero-image"
+                src={item.imageUrl}
+                alt={item.imageAlt || item.title}
+                style={{ objectPosition: `${item.imageFocusX ?? 50}% ${item.imageFocusY ?? 30}%` }}
+              />
               <figcaption>
                 Nuotrauka: {item.imageAuthor || item.sourceName}
                 {item.imagePageUrl ? <> · <a href={item.imagePageUrl} target="_blank" rel="noreferrer">šaltinis</a></> : null}
