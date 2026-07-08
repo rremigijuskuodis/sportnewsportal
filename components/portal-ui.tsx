@@ -91,16 +91,6 @@ function getSportClass(value: string) {
   return "is-other";
 }
 
-function getStatusTone(item: FeedItem) {
-  if (item.riskLevel === "high" || item.label?.toLowerCase().includes("riz")) {
-    return "danger";
-  }
-  if (item.category.toLowerCase().includes("rezultat")) {
-    return "success";
-  }
-  return "neutral";
-}
-
 function getWhyText(item: FeedItem) {
   return item.whyItMatters || item.lead || item.summary;
 }
@@ -168,9 +158,6 @@ export function HeroNews({ item }: { item: FeedItem }) {
       <div className="hero-copy">
         <div className="hero-meta">
           <span className={`tag ${getSportClass(item.sport)}`}>{toTitle(item.sport)}</span>
-          <span className={`status-dot ${getStatusTone(item)}`}>
-            Prioritetas {item.priorityScore || 4}/5
-          </span>
           <time dateTime={item.publishedAt}>{formatDate(item.publishedAt)}</time>
         </div>
 
@@ -254,9 +241,6 @@ export function HeroShowcase({
         <div className="showcase-copy">
           <div className="hero-meta">
             <span className={`tag ${getSportClass(activeItem.sport)}`}>{toTitle(activeItem.sport)}</span>
-            <span className={`status-dot ${getStatusTone(activeItem)}`}>
-              Prioritetas {activeItem.priorityScore || 4}/5
-            </span>
             <time dateTime={activeItem.publishedAt}>{formatDate(activeItem.publishedAt)}</time>
           </div>
 

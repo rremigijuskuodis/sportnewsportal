@@ -279,7 +279,7 @@ img {
 
 .showcase-main {
   position: relative;
-  min-height: 620px;
+  height: 620px;
   border-radius: 20px;
   overflow: hidden;
   background: #08111d;
@@ -296,6 +296,7 @@ img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center 28%;
 }
 
 .showcase-overlay {
@@ -312,7 +313,7 @@ img {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  min-height: 100%;
+  height: 100%;
   padding: 42px 42px 148px;
 }
 
@@ -323,6 +324,11 @@ img {
   line-height: 0.98;
   letter-spacing: -0.04em;
   text-wrap: balance;
+  display: -webkit-box;
+  height: 2.94em;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
 }
 
 .section-kicker.light {
@@ -336,6 +342,7 @@ img {
 
 .showcase-copy .hero-lead {
   max-width: 58ch;
+  height: 3.5em;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -360,10 +367,18 @@ img {
 .hero-editor-note.dark {
   background: rgba(255, 255, 255, 0.08);
   border-color: rgba(255, 255, 255, 0.14);
+  width: min(360px, 100%);
+  height: 92px;
+  align-content: start;
+  overflow: hidden;
 }
 
 .hero-editor-note.dark span {
   color: rgba(255, 255, 255, 0.8);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
 }
 
 .showcase-tabs {
@@ -1182,7 +1197,7 @@ img {
   }
 
   .showcase-main {
-    min-height: 600px;
+    height: 600px;
   }
 
   .showcase-grid > .radar-panel {
@@ -1262,6 +1277,7 @@ img {
   .showcase-copy h1 {
     max-width: none;
     font-size: clamp(2rem, 9vw, 3.25rem);
+    height: 3.92em;
     -webkit-line-clamp: 4;
   }
 
@@ -1302,12 +1318,24 @@ img {
   }
 
   .showcase-main {
-    min-height: 540px;
+    height: 600px;
     border-radius: 16px;
   }
 
   .showcase-copy {
-    padding: 24px 18px 110px;
+    justify-content: flex-end;
+    padding: 210px 18px 110px;
+  }
+
+  .showcase-visual img {
+    height: 52%;
+    object-fit: cover;
+    object-position: center 24%;
+  }
+
+  .showcase-overlay {
+    background:
+      linear-gradient(180deg, rgba(6, 13, 23, 0.04) 0%, rgba(6, 13, 23, 0.18) 28%, #08111d 54%, #08111d 100%);
   }
 
   .showcase-copy .hero-meta time,
@@ -1316,9 +1344,17 @@ img {
   }
 
   .showcase-copy .hero-lead {
-    -webkit-line-clamp: 3;
+    height: 3.1em;
+    -webkit-line-clamp: 2;
     font-size: 0.96rem;
     line-height: 1.55;
+  }
+
+  .article-hero-image {
+    min-height: 0;
+    max-height: 70vh;
+    object-fit: contain;
+    background: #08111d;
   }
 
   .headlines-panel {
