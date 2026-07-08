@@ -324,11 +324,15 @@ img {
   line-height: 0.98;
   letter-spacing: -0.04em;
   text-wrap: balance;
-  display: -webkit-box;
-  height: 2.94em;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  overflow: hidden;
+}
+
+.showcase-copy h1.is-long {
+  font-size: clamp(2.2rem, 3.8vw, 3.55rem);
+}
+
+.showcase-copy h1.is-very-long {
+  font-size: clamp(1.95rem, 3.25vw, 3rem);
+  line-height: 1.02;
 }
 
 .section-kicker.light {
@@ -1277,8 +1281,14 @@ img {
   .showcase-copy h1 {
     max-width: none;
     font-size: clamp(2rem, 9vw, 3.25rem);
-    height: 3.92em;
-    -webkit-line-clamp: 4;
+  }
+
+  .showcase-copy h1.is-long {
+    font-size: clamp(1.8rem, 7.5vw, 2.7rem);
+  }
+
+  .showcase-copy h1.is-very-long {
+    font-size: clamp(1.55rem, 6.5vw, 2.25rem);
   }
 
   .showcase-actions .hero-editor-note {
@@ -1318,7 +1328,7 @@ img {
   }
 
   .showcase-main {
-    height: 600px;
+    height: 640px;
     border-radius: 16px;
   }
 

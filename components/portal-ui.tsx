@@ -95,6 +95,12 @@ function getWhyText(item: FeedItem) {
   return item.whyItMatters || item.lead || item.summary;
 }
 
+function getHeroTitleClass(title: string) {
+  if (title.length > 105) return "is-very-long";
+  if (title.length > 75) return "is-long";
+  return "";
+}
+
 function useLiveRefresh(intervalMs = 75000) {
   const router = useRouter();
 
@@ -249,7 +255,7 @@ export function HeroShowcase({
           </div>
 
           <span className="section-kicker light">Pagrindinė naujiena</span>
-          <h1>{activeItem.title}</h1>
+          <h1 className={getHeroTitleClass(activeItem.title)}>{activeItem.title}</h1>
           <p className="hero-lead">{activeItem.lead || activeItem.summary}</p>
 
           <div className="showcase-actions">
