@@ -3,11 +3,16 @@ import {
   ADMIN_ACCESS_COOKIE,
   ADMIN_EMAIL,
   ADMIN_REFRESH_COOKIE,
+  hasAdminSession,
   getAdminSupabaseEnv,
   getAdminUser
 } from "@/lib/admin-server";
 
 export async function GET(request: NextRequest) {
+  if (hasAdminSession(request)) {
+    return NextResponse.json({ email: ADMIN_EMAIL });
+  }
+
   const user = await getAdminUser(request);
   if (user) return NextResponse.json({ email: user.email });
 

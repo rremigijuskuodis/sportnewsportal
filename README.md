@@ -38,6 +38,10 @@ Vercel deployment'ui reikės šių env:
 
 - `SUPABASE_URL`
 - `SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `ADMIN_EMAIL`
+- `ADMIN_PASSWORD`
+- `ADMIN_SESSION_SECRET`
 - `NEXT_PUBLIC_SITE_URL`
 
 ## Tolesni žingsniai

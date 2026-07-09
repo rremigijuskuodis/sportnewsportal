@@ -3,10 +3,16 @@ import {
   ADMIN_ACCESS_COOKIE,
   ADMIN_EMAIL,
   ADMIN_REFRESH_COOKIE,
+  ADMIN_SESSION_COOKIE,
+  hasAdminSession,
   getAdminSupabaseEnv
 } from "@/lib/admin-server";
 
 export async function POST(request: NextRequest) {
+  if (hasAdminSession(request)) {
+    return NextResponse.json({ ok: true });
+  }
+
   const body = (await request.json().catch(() => ({}))) as {
     access_token?: string;
     refresh_token?: string;
@@ -51,6 +57,6 @@ export async function DELETE(request: NextRequest) {
   const response = NextResponse.json({ ok: true });
   response.cookies.set(ADMIN_ACCESS_COOKIE, "", { path: "/", maxAge: 0 });
   response.cookies.set(ADMIN_REFRESH_COOKIE, "", { path: "/", maxAge: 0 });
+  response.cookies.set(ADMIN_SESSION_COOKIE, "", { path: "/", maxAge: 0 });
   return response;
 }
-

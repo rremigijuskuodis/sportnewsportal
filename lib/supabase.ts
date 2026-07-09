@@ -50,10 +50,9 @@ async function fetchSupabaseRows(format: "short" | "article") {
 
   const endpoint = new URL("/rest/v1/articles", url);
   endpoint.searchParams.set("select", "*");
-  endpoint.searchParams.set("format", `eq.${format}`);
   endpoint.searchParams.set("status", "eq.published");
   endpoint.searchParams.set("order", "published_at.desc");
-  endpoint.searchParams.set("limit", format === "short" ? "12" : "18");
+  endpoint.searchParams.set("limit", format === "short" ? "20" : "32");
 
   const response = await fetch(endpoint.toString(), {
     headers: {
@@ -61,7 +60,7 @@ async function fetchSupabaseRows(format: "short" | "article") {
       Authorization: `Bearer ${anonKey}`,
       Accept: "application/json"
     },
-    next: { revalidate: 60 }
+    next: { revalidate: 15 }
   });
 
   if (!response.ok) {
@@ -69,11 +68,19 @@ async function fetchSupabaseRows(format: "short" | "article") {
   }
 
   const rows = (await response.json()) as SupabaseArticleRow[];
-  if (!rows.length) {
+  const filteredRows = rows.filter((row) => {
+    if (format === "short") {
+      return row.format === "short";
+    }
+
+    if (row.format === "short") return false;
+    return Boolean(row.body_markdown || row.lead || row.summary);
+  });
+  if (!filteredRows.length) {
     return format === "short" ? mockShortFeed : mockArticleFeed;
   }
 
-  return rows.map((row) => normalizeRow(row, format));
+  return filteredRows.map((row) => normalizeRow(row, format));
 }
 
 function normalizeRow(row: SupabaseArticleRow, format: "short" | "article"): FeedItem {

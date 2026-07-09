@@ -96,8 +96,8 @@ function getWhyText(item: FeedItem) {
 }
 
 function getHeroTitleClass(title: string) {
-  if (title.length > 105) return "is-very-long";
-  if (title.length > 75) return "is-long";
+  if (title.length > 88) return "is-very-long";
+  if (title.length > 58) return "is-long";
   return "";
 }
 
