@@ -67,7 +67,10 @@ create table if not exists public.portal_settings (
   automation_enabled boolean not null default true,
   article_interval_hours integer not null default 6 check (article_interval_hours between 1 and 24),
   articles_per_day integer not null default 2 check (articles_per_day between 0 and 50),
+  articles_per_hour integer not null default 1 check (articles_per_hour between 0 and 10),
   articles_per_run integer not null default 1 check (articles_per_run between 1 and 10),
+  generation_start_hour integer not null default 8 check (generation_start_hour between 0 and 23),
+  generation_end_hour integer not null default 23 check (generation_end_hour between 0 and 23),
   article_model text not null default 'gpt-5.4-mini' check (article_model in ('gpt-5.4-mini', 'gpt-5.4')),
   radar_enabled boolean not null default true,
   radar_interval_minutes integer not null default 120 check (radar_interval_minutes between 15 and 360),
@@ -78,6 +81,10 @@ create table if not exists public.portal_settings (
 );
 
 insert into public.portal_settings (id) values ('portal') on conflict (id) do nothing;
+
+alter table public.portal_settings add column if not exists articles_per_hour integer not null default 1 check (articles_per_hour between 0 and 10);
+alter table public.portal_settings add column if not exists generation_start_hour integer not null default 8 check (generation_start_hour between 0 and 23);
+alter table public.portal_settings add column if not exists generation_end_hour integer not null default 23 check (generation_end_hour between 0 and 23);
 alter table public.portal_settings enable row level security;
 
 drop policy if exists "admins manage portal settings" on public.portal_settings;
@@ -127,4 +134,3 @@ drop trigger if exists article_admin_audit_trigger on public.articles;
 create trigger article_admin_audit_trigger
 after insert or update or delete on public.articles
 for each row execute function public.log_article_admin_change();
-

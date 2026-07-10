@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { adminRestFetch } from "@/lib/admin-server";
 
 const settingFields = new Set([
-  "automation_enabled", "article_interval_hours", "articles_per_day", "articles_per_run",
+  "automation_enabled", "article_interval_hours", "articles_per_day", "articles_per_hour", "articles_per_run",
+  "generation_start_hour", "generation_end_hour",
   "article_model", "radar_enabled", "radar_interval_minutes", "radar_model",
   "auto_approve_enabled", "minimum_priority"
 ]);

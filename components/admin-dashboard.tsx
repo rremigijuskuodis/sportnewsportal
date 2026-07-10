@@ -32,7 +32,10 @@ type PortalSettings = {
   automation_enabled: boolean;
   article_interval_hours: number;
   articles_per_day: number;
+  articles_per_hour: number;
   articles_per_run: number;
+  generation_start_hour: number;
+  generation_end_hour: number;
   article_model: string;
   radar_enabled: boolean;
   radar_interval_minutes: number;
@@ -45,7 +48,10 @@ const defaultSettings: PortalSettings = {
   automation_enabled: true,
   article_interval_hours: 6,
   articles_per_day: 2,
+  articles_per_hour: 1,
   articles_per_run: 1,
+  generation_start_hour: 8,
+  generation_end_hour: 23,
   article_model: "gpt-5.4-mini",
   radar_enabled: true,
   radar_interval_minutes: 120,
@@ -208,7 +214,10 @@ export function AdminDashboard() {
             <label className="admin-check"><input type="checkbox" checked={settings.automation_enabled} onChange={(e) => setSettings({...settings, automation_enabled:e.target.checked})} /> Generuoti straipsnius automatiškai</label>
             <label>Generavimo intervalas (val.)<input type="number" min="1" max="24" value={settings.article_interval_hours} onChange={(e) => setSettings({...settings, article_interval_hours:Number(e.target.value)})} /></label>
             <label>Straipsnių per dieną<input type="number" min="0" max="50" value={settings.articles_per_day} onChange={(e) => setSettings({...settings, articles_per_day:Number(e.target.value)})} /></label>
+            <label>Straipsnių per valandą<input type="number" min="0" max="10" value={settings.articles_per_hour} onChange={(e) => setSettings({...settings, articles_per_hour:Number(e.target.value)})} /></label>
             <label>Straipsnių vienu paleidimu<input type="number" min="1" max="10" value={settings.articles_per_run} onChange={(e) => setSettings({...settings, articles_per_run:Number(e.target.value)})} /></label>
+            <label>Generuoti nuo (val.)<input type="number" min="0" max="23" value={settings.generation_start_hour} onChange={(e) => setSettings({...settings, generation_start_hour:Number(e.target.value)})} /></label>
+            <label>Generuoti iki (val.)<input type="number" min="0" max="23" value={settings.generation_end_hour} onChange={(e) => setSettings({...settings, generation_end_hour:Number(e.target.value)})} /></label>
             <label>Straipsnių AI modelis<select value={settings.article_model} onChange={(e) => setSettings({...settings, article_model:e.target.value})}><option value="gpt-5.4-mini">GPT-5.4 mini</option><option value="gpt-5.4">GPT-5.4</option></select></label>
             <label className="admin-check"><input type="checkbox" checked={settings.radar_enabled} onChange={(e) => setSettings({...settings, radar_enabled:e.target.checked})} /> Sporto radaras įjungtas</label>
             <label>Radaro intervalas (min.)<input type="number" min="15" step="15" max="360" value={settings.radar_interval_minutes} onChange={(e) => setSettings({...settings, radar_interval_minutes:Number(e.target.value)})} /></label>
