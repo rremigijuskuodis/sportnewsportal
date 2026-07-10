@@ -582,7 +582,7 @@ export function Footer() {
       <div className="footer-links">
         <a href="/#naujienos">Naujienos</a>
         <a href="/#radaras">Sporto radaras</a>
-        <a href="mailto:news@sicenterhub.com">Kontaktai</a>
+        <Link href="/kontaktai">Kontaktai</Link>
       </div>
     </footer>
   );
