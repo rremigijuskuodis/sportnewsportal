@@ -1,9 +1,10 @@
-import { mockArticleFeed } from "@/lib/mock-data";
+import { loadPublishedArticleFeedForSeo } from "@/lib/supabase";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://naujienos.sicenterhub.com";
 
 export async function GET() {
-  const items = mockArticleFeed
+  const articles = await loadPublishedArticleFeedForSeo();
+  const items = articles
     .map((item) => {
       return `
         <item>

@@ -1,10 +1,10 @@
 import type { MetadataRoute } from "next";
-import { mockArticleFeed, mockShortFeed } from "@/lib/mock-data";
+import { loadPublishedArticleFeedForSeo } from "@/lib/supabase";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://naujienos.sicenterhub.com";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const combined = [...mockArticleFeed, ...mockShortFeed];
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const articles = await loadPublishedArticleFeedForSeo();
 
   return [
     {
@@ -13,7 +13,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "hourly",
       priority: 1
     },
-    ...combined.map((item) => ({
+    {
+      url: `${siteUrl}/kontaktai`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.4
+    },
+    ...articles.map((item) => ({
       url: `${siteUrl}/${item.slug}`,
       lastModified: new Date(item.publishedAt),
       changeFrequency: "daily" as const,

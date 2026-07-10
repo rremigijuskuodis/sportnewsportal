@@ -141,3 +141,25 @@ export async function loadPortalFeed() {
     articleFeed
   };
 }
+
+export async function loadPublishedArticleFeedForSeo() {
+  const { url, anonKey } = getSupabaseEnv();
+  if (!url || !anonKey) return [];
+  const endpoint = new URL("/rest/v1/articles", url);
+  endpoint.searchParams.set("select", "*");
+  endpoint.searchParams.set("status", "eq.published");
+  endpoint.searchParams.set("format", "eq.article");
+  endpoint.searchParams.set("order", "published_at.desc");
+  endpoint.searchParams.set("limit", "200");
+  try {
+    const response = await fetch(endpoint.toString(), {
+      headers: { apikey: anonKey, Authorization: `Bearer ${anonKey}`, Accept: "application/json" },
+      next: { revalidate: 300 }
+    });
+    if (!response.ok) return [];
+    const rows = (await response.json()) as SupabaseArticleRow[];
+    return rows.filter((row) => row.slug && row.title).map((row) => normalizeRow(row, "article"));
+  } catch {
+    return [];
+  }
+}
