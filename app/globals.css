@@ -1074,6 +1074,10 @@ img {
 }
 
 .contact-shell { min-height: 100vh; }
+.search-results-page { min-height: 55vh; }
+.search-results-page h1 { margin: 10px 0 12px; }
+.search-empty { color: var(--muted); margin: 0 0 24px; }
+.search-back { display: inline-flex; margin-top: 28px; }
 .contact-card {
   max-width: 760px;
   margin: 72px auto;

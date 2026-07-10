@@ -129,10 +129,10 @@ export function Header() {
       </Link>
 
       <div className="header-tools">
-        <label className="search-shell" aria-label="Paieška">
+        <form className="search-shell" action="/paieska" role="search">
           <span aria-hidden="true">⌕</span>
-          <input placeholder="Ieškoti naujienų" />
-        </label>
+          <input name="q" placeholder="Ieškoti naujienų" aria-label="Ieškoti naujienų" />
+        </form>
         <a className="radar-link" href="/#radaras">
           <span className="live-dot" />
           Gyvas radaras
