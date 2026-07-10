@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import type { FeedItem } from "@/lib/types";
+import type { FeedItem, MatchStats } from "@/lib/types";
 
 type NavItem = {
   label: string;
@@ -464,6 +464,44 @@ export function WhyItMattersBox({ text }: { text: string }) {
   );
 }
 
+export function MatchStatsBox({ stats }: { stats?: MatchStats }) {
+  if (!stats) return null;
+  const rows = [...(stats.team_stats || []), ...(stats.periods || [])];
+  return (
+    <section className="match-stats-box" aria-label="Rungtynių statistika">
+      <div className="match-stats-head">
+        <span className="section-kicker">Statistika</span>
+        {stats.competition ? <small>{stats.competition}</small> : null}
+      </div>
+      {stats.event ? <h2>{stats.event}</h2> : null}
+      {stats.home_team || stats.away_team || stats.final_score ? (
+        <div className="match-scoreline">
+          <strong>{stats.home_team || "Šeimininkai"}</strong>
+          <b>{stats.final_score || "–"}</b>
+          <strong>{stats.away_team || "Svečiai"}</strong>
+        </div>
+      ) : null}
+      {rows.length ? (
+        <div className="match-stats-table">
+          {rows.map((row, index) => (
+            <div className="match-stats-row" key={`${row.label || "rodiklis"}-${index}`}>
+              <span>{row.label || "Rodiklis"}</span>
+              <b>{row.home ?? "–"}</b>
+              <b>{row.away ?? "–"}</b>
+            </div>
+          ))}
+        </div>
+      ) : null}
+      {stats.leaders?.length ? (
+        <ul className="match-leaders">
+          {stats.leaders.map((leader, index) => <li key={`${leader.player || "lyderis"}-${index}`}><strong>{leader.label || "Lyderis"}:</strong> {leader.player || "–"} {leader.value ? `(${leader.value})` : ""}</li>)}
+        </ul>
+      ) : null}
+      {stats.note ? <p className="match-stats-note">{stats.note}</p> : null}
+    </section>
+  );
+}
+
 export function RelatedNews({ items }: { items: FeedItem[] }) {
   return (
     <section className="content-block compact-block">
@@ -655,6 +693,7 @@ export function ArticlePage({
           ) : null}
 
           <WhyItMattersBox text={getWhyText(item)} />
+          <MatchStatsBox stats={item.matchStats} />
 
           <div className="article-body">
             {(item.bodyMarkdown || item.summary).split("\n\n").map((paragraph, index) => (

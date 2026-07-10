@@ -6,6 +6,7 @@ export type FeedItem = {
   title: string;
   summary: string;
   bodyMarkdown?: string;
+  matchStats?: MatchStats;
   category: string;
   sport: string;
   sourceName: string;
@@ -35,4 +36,17 @@ export type FeedItem = {
   possibleDuplicate?: boolean;
   topicKey?: string;
   featured?: boolean;
+};
+
+export type MatchStats = {
+  competition?: string;
+  event?: string;
+  status?: string;
+  home_team?: string;
+  away_team?: string;
+  final_score?: string;
+  periods?: Array<{ label?: string; home?: string | number; away?: string | number }>;
+  leaders?: Array<{ label?: string; player?: string; value?: string | number }>;
+  team_stats?: Array<{ label?: string; home?: string | number; away?: string | number }>;
+  note?: string;
 };

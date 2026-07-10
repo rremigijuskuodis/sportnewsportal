@@ -6,6 +6,7 @@ type SupabaseArticleRow = {
   title: string;
   summary: string | null;
   body_markdown: string | null;
+  match_stats: FeedItem["matchStats"] | null;
   category: string | null;
   sport: string | null;
   source_name: string | null;
@@ -103,6 +104,7 @@ function normalizeRow(row: SupabaseArticleRow, format: "short" | "article"): Fee
     imageFocusX: row.image_focus_x ?? 50,
     imageFocusY: row.image_focus_y ?? 30,
     bodyMarkdown: row.body_markdown || summary,
+    matchStats: row.match_stats || undefined,
     slug: row.slug || row.id,
     format,
     publishedAt: row.published_at || new Date().toISOString(),

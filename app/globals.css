@@ -668,6 +668,33 @@ img {
   box-shadow: none;
 }
 
+.match-stats-box {
+  margin: 24px 0;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #f7faff;
+}
+
+.match-stats-head,
+.match-stats-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.match-stats-head { justify-content: space-between; }
+.match-stats-box h2 { margin: 8px 0 14px; font-size: 1.15rem; }
+.match-scoreline { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; padding: 14px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.match-scoreline strong:last-child { text-align: right; }
+.match-scoreline b { font-size: 1.35rem; }
+.match-stats-table { margin-top: 12px; }
+.match-stats-row { justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.match-stats-row span { flex: 1; color: var(--muted); }
+.match-stats-row b { min-width: 42px; text-align: center; }
+.match-leaders { margin: 14px 0 0; padding-left: 18px; color: var(--muted); }
+.match-stats-note { margin: 14px 0 0; color: var(--muted); font-size: .9rem; }
+
 .page-shell > .content-block {
   margin-top: 24px;
 }

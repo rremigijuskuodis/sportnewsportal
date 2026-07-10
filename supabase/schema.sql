@@ -6,6 +6,7 @@ create table if not exists public.articles (
   title text not null,
   summary text not null,
   body_markdown text,
+  match_stats jsonb,
   seo_title text,
   meta_description text,
   category text not null default 'news',
@@ -40,6 +41,7 @@ create table if not exists public.articles (
 );
 
 alter table public.articles add column if not exists lead text;
+alter table public.articles add column if not exists match_stats jsonb;
 alter table public.articles add column if not exists priority_score integer;
 alter table public.articles add column if not exists risk_level text default 'low';
 alter table public.articles add column if not exists short_news_possible boolean default false;

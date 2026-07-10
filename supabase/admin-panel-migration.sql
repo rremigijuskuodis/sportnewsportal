@@ -42,6 +42,7 @@ alter table public.articles add column if not exists is_featured boolean not nul
 alter table public.articles add column if not exists scheduled_at timestamptz;
 alter table public.articles add column if not exists image_focus_x integer not null default 50;
 alter table public.articles add column if not exists image_focus_y integer not null default 30;
+alter table public.articles add column if not exists match_stats jsonb;
 
 drop policy if exists "admins read all articles" on public.articles;
 drop policy if exists "admins create articles" on public.articles;
