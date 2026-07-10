@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { loadPublishedArticleFeedForSeo } from "@/lib/supabase";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://naujienos.sicenterhub.com";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://sportoradaras.lt";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const articles = await loadPublishedArticleFeedForSeo();

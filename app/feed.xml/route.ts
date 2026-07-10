@@ -1,6 +1,6 @@
 import { loadPublishedArticleFeedForSeo } from "@/lib/supabase";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://naujienos.sicenterhub.com";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://sportoradaras.lt";
 
 export async function GET() {
   const articles = await loadPublishedArticleFeedForSeo();

@@ -53,7 +53,7 @@ export default async function SlugPage({
     description: item.lead || item.summary,
     datePublished: item.publishedAt,
     dateModified: item.publishedAt,
-    mainEntityOfPage: `${process.env.NEXT_PUBLIC_SITE_URL || "https://naujienos.sicenterhub.com"}/${item.slug}`,
+    mainEntityOfPage: `${process.env.NEXT_PUBLIC_SITE_URL || "https://sportoradaras.lt"}/${item.slug}`,
     author: { "@type": "Organization", name: item.sourceName || "Sporto redakcija" },
     publisher: { "@type": "Organization", name: "Sporto redakcija" },
     image: item.imageUrl ? [item.imageUrl] : undefined
