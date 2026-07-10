@@ -121,11 +121,7 @@ export function Header() {
   return (
     <header className="site-header">
       <Link href="/" className="brandmark" aria-label="Sporto redakcija – pradinis puslapis">
-        <span className="brandmark-badge">SR</span>
-        <span className="brandmark-copy">
-          <strong>Sporto redakcija</strong>
-          <small>Lietuvos sporto pulsas</small>
-        </span>
+        <img className="brand-logo" src="/brand/sporto-radaras-logo.png" alt="Sporto Radaras" />
       </Link>
 
       <div className="header-tools">
