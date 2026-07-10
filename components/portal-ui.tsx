@@ -129,7 +129,7 @@ export function Header() {
           <span aria-hidden="true">⌕</span>
           <input name="q" placeholder="Ieškoti naujienų" aria-label="Ieškoti naujienų" />
         </form>
-        <a className="radar-link" href="/#radaras">
+        <a className="radar-link" href="/radaras">
           <span className="live-dot" />
           Gyvas radaras
         </a>
@@ -284,6 +284,8 @@ export function HeroShowcase({
         title="Sporto radaras"
         description="Aktualiausi trumpi signalai ir AI redakcijos įžvalgos"
         compact
+        maxItems={12}
+        scrollable
       />
     </section>
   );
@@ -400,7 +402,7 @@ export function SportRadarSidebar({
         ))}
       </div>
 
-      <Link href="/#radaras" className="ghost-link">
+      <Link href="/radaras" className="ghost-link">
         Visi signalai
       </Link>
     </aside>
@@ -577,7 +579,7 @@ export function Footer() {
       </div>
       <div className="footer-links">
         <a href="/#naujienos">Naujienos</a>
-        <a href="/#radaras">Sporto radaras</a>
+        <a href="/radaras">Sporto radaras</a>
         <Link href="/kontaktai">Kontaktai</Link>
       </div>
     </footer>
