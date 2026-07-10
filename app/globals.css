@@ -459,6 +459,10 @@ img {
   border-radius: 20px;
 }
 
+.showcase-grid > .radar-panel.scrollable {
+  overflow: hidden;
+}
+
 .radar-panel.compact .block-head {
   align-items: flex-start;
 }
@@ -1245,6 +1249,45 @@ img {
 
 .radar-mobile {
   display: none;
+}
+
+.radar-page-shell {
+  padding-block: 28px 56px;
+}
+
+.radar-page-panel {
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.radar-page-head {
+  align-items: flex-end;
+  margin-bottom: 18px;
+}
+
+.radar-page-head h1 {
+  margin: 4px 0 0;
+  font-size: clamp(2rem, 4vw, 3.4rem);
+}
+
+.radar-page-head p {
+  max-width: 320px;
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.radar-page-list {
+  max-height: min(760px, calc(100vh - 260px));
+  overflow-y: auto;
+  padding-right: 10px;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+}
+
+.radar-page-list .signal-card {
+  padding-block: 18px;
 }
 
 @media (max-width: 1080px) {
