@@ -26,12 +26,11 @@ type EventItem = {
 };
 
 const defaultSports: NavItem[] = [
-  { label: "Visos", href: "#naujienos" },
-  { label: "Krepšinis", href: "#krepsinis" },
-  { label: "Futbolas", href: "#futbolas" },
-  { label: "Kitos sporto šakos", href: "#kitos-sporto-sakos" },
-  { label: "Sporto vadyba", href: "#sporto-vadyba" },
-  { label: "Renginiai", href: "#renginiai" }
+  { label: "Visos", href: "/#naujienos" },
+  { label: "Krepšinis", href: "/#krepsinis" },
+  { label: "Futbolas", href: "/#futbolas" },
+  { label: "Kitos sporto šakos", href: "/#kitos-sporto-sakos" },
+  { label: "Sporto vadyba", href: "/#sporto-vadyba" }
 ];
 
 function formatTime(value: string, withDate = false) {
@@ -134,7 +133,7 @@ export function Header() {
           <span aria-hidden="true">⌕</span>
           <input placeholder="Ieškoti naujienų" />
         </label>
-        <a className="radar-link" href="#radaras">
+        <a className="radar-link" href="/#radaras">
           <span className="live-dot" />
           Gyvas radaras
         </a>
@@ -354,9 +353,7 @@ export function ShortSignalCard({ item }: { item: FeedItem }) {
         <time dateTime={item.publishedAt}>{formatTime(item.publishedAt)}</time>
         <span className={`tag ${getSportClass(item.sport)}`}>{toTitle(item.sport)}</span>
       </div>
-      <Link href={`/${item.slug}`}>
-        <h4>{item.title}</h4>
-      </Link>
+      <h4>{item.title}</h4>
       <p className="signal-summary">{item.summary}</p>
       {showWhy ? (
         <div className="signal-insight">
@@ -407,7 +404,7 @@ export function SportRadarSidebar({
         ))}
       </div>
 
-      <Link href="#radaras" className="ghost-link">
+      <Link href="/#radaras" className="ghost-link">
         Visi signalai
       </Link>
     </aside>
@@ -490,7 +487,7 @@ export function EventCalendarPreview({ items }: { items: EventItem[] }) {
   if (!items.length) return null;
 
   return (
-    <section className="content-block" id="renginiai">
+      <section className="content-block" id="renginiai">
       <div className="block-head">
         <div>
           <span className="section-kicker">Renginių kalendorius</span>
@@ -545,8 +542,8 @@ export function Footer() {
         <p>Modernus Lietuvos sporto naujienų portalas su gyvu radaru ir redakciniu filtru.</p>
       </div>
       <div className="footer-links">
-        <a href="#naujienos">Naujienos</a>
-        <a href="#radaras">Sporto radaras</a>
+        <a href="/#naujienos">Naujienos</a>
+        <a href="/#radaras">Sporto radaras</a>
         <a href="mailto:news@sicenterhub.com">Kontaktai</a>
       </div>
     </footer>
@@ -607,7 +604,6 @@ export function HomePortal({
             </section>
           ))}
 
-          <EventCalendarPreview items={events} />
       </div>
 
       <Footer />

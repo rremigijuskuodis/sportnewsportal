@@ -289,6 +289,8 @@ img {
 .showcase-visual {
   position: absolute;
   inset: 0;
+  z-index: 1;
+  cursor: pointer;
 }
 
 .showcase-visual img,
@@ -310,12 +312,18 @@ img {
 .showcase-copy {
   position: relative;
   z-index: 2;
+  pointer-events: none;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   height: 100%;
   padding: 42px 42px 148px;
   max-width: min(860px, 92%);
+}
+
+.showcase-copy a,
+.showcase-copy button {
+  pointer-events: auto;
 }
 
 .showcase-copy h1 {
