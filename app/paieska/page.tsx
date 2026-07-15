@@ -4,8 +4,9 @@ import { NewsCard, Header, SportCategoryNav, Footer } from "@/components/portal-
 import { loadPortalFeed } from "@/lib/supabase";
 
 export const metadata: Metadata = {
-  title: "Paieška | Sporto redakcija",
-  description: "Ieškokite Lietuvos sporto naujienų pagal temą, sporto šaką ar šaltinį."
+  title: "Paieška",
+  description: "Ieškokite Lietuvos sporto naujienų pagal temą, sporto šaką ar šaltinį.",
+  robots: { index: false, follow: true }
 };
 
 export default async function SearchPage({ searchParams }: { searchParams: { q?: string } }) {

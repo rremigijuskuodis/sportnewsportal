@@ -1,8 +1,15 @@
+import type { Metadata } from "next";
 import { Header, Footer, ShortSignalCard } from "@/components/portal-ui";
 import { loadPortalFeed } from "@/lib/supabase";
 import { preparePortalData } from "@/lib/portal-data";
 
 export const revalidate = 60;
+
+export const metadata: Metadata = {
+  title: "Sporto radaras",
+  description: "Trumpi naujausi signalai iš Lietuvos ir pasaulio sporto.",
+  alternates: { canonical: "/radaras" }
+};
 
 export default async function RadarPage() {
   const { articleFeed, shortFeed } = await loadPortalFeed();

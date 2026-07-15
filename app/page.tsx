@@ -1,6 +1,14 @@
+import type { Metadata } from "next";
 import { HomePortal } from "@/components/portal-ui";
 import { preparePortalData } from "@/lib/portal-data";
 import { loadPortalFeed } from "@/lib/supabase";
+import { siteConfig } from "@/lib/site-config";
+
+export const metadata: Metadata = {
+  title: { absolute: siteConfig.title },
+  description: siteConfig.description,
+  alternates: { canonical: "/" }
+};
 
 export default async function HomePage() {
   const { shortFeed, articleFeed } = await loadPortalFeed();

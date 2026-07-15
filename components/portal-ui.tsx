@@ -90,6 +90,14 @@ function getSportClass(value: string) {
   return "is-other";
 }
 
+function getSportBucket(value: string) {
+  const normalized = value.toLowerCase();
+  if (normalized.includes("krep") || normalized.includes("basket")) return "basketball";
+  if (normalized.includes("fut") || normalized.includes("foot") || normalized.includes("soccer")) return "football";
+  if (normalized.includes("vady") || normalized.includes("management")) return "management";
+  return "other";
+}
+
 function getWhyText(item: FeedItem) {
   return item.whyItMatters || item.lead || item.summary;
 }
@@ -120,7 +128,7 @@ function useLiveRefresh(intervalMs = 75000) {
 export function Header() {
   return (
     <header className="site-header">
-      <Link href="/" className="brandmark" aria-label="Sporto redakcija – pradinis puslapis">
+      <Link href="/" className="brandmark" aria-label="Sporto Radaras – pradinis puslapis">
         <img className="brand-logo" src="/brand/sporto-radaras-logo.png" alt="Sporto Radaras" />
       </Link>
 
@@ -233,6 +241,8 @@ export function HeroShowcase({
             <img
               src={activeItem.imageUrl}
               alt={activeItem.imageAlt || activeItem.title}
+              fetchPriority="high"
+              decoding="async"
               style={{ objectPosition: `${activeItem.imageFocusX ?? 50}% ${activeItem.imageFocusY ?? 30}%` }}
             />
           ) : (
@@ -257,10 +267,6 @@ export function HeroShowcase({
             <Link href={`/${activeItem.slug}`} className="primary-link">
               Skaityti daugiau
             </Link>
-            <div className="hero-editor-note dark">
-              <strong>Kodėl verta atkreipti dėmesį?</strong>
-              <span>{getWhyText(activeItem)}</span>
-            </div>
           </div>
         </div>
 
@@ -271,6 +277,8 @@ export function HeroShowcase({
               type="button"
               className={`showcase-tab ${index === activeIndex ? "active" : ""}`}
               onClick={() => setActiveIndex(index)}
+              aria-selected={index === activeIndex}
+              aria-label={`Rodyti naujieną: ${item.title}`}
             >
               <span>{toTitle(item.category || item.sport)}</span>
               <strong>{item.title}</strong>
@@ -315,7 +323,13 @@ export function NewsCard({
         </div>
 
         {item.imageUrl ? (
-          <img src={item.imageUrl} alt={item.imageAlt || item.title} className="news-card-image" />
+          <img
+            src={item.imageUrl}
+            alt={item.imageAlt || item.title}
+            className="news-card-image"
+            loading="lazy"
+            decoding="async"
+          />
         ) : null}
       </Link>
     </article>
@@ -525,7 +539,7 @@ export function EventCalendarPreview({ items }: { items: EventItem[] }) {
       <div className="event-list">
         {items.map((item) => (
           <article key={item.title} className="event-card">
-            {item.imageUrl ? <img src={item.imageUrl} alt={item.title} className="event-card-image" /> : null}
+            {item.imageUrl ? <img src={item.imageUrl} alt={item.title} className="event-card-image" loading="lazy" decoding="async" /> : null}
             <strong>{item.dateLabel}</strong>
             <h3>{item.title}</h3>
             <p>Šaltinis: {item.place}</p>
@@ -565,12 +579,15 @@ export function Footer() {
   return (
     <footer className="site-footer">
       <div>
-        <strong>Sporto redakcija</strong>
-        <p>Modernus Lietuvos sporto naujienų portalas su gyvu radaru ir redakciniu filtru.</p>
+        <strong>Sporto Radaras</strong>
+        <p>VšĮ Sporto inovacijų centro kuriamas Lietuvos sporto naujienų portalas.</p>
       </div>
       <div className="footer-links">
         <a href="/naujienos">Naujienos</a>
         <a href="/radaras">Sporto radaras</a>
+        <Link href="/apie">Apie mus</Link>
+        <Link href="/redakcijos-principai">Redakcijos principai</Link>
+        <Link href="/privatumo-politika">Privatumas</Link>
         <Link href="/kontaktai">Kontaktai</Link>
       </div>
     </footer>
@@ -592,10 +609,25 @@ export function HomePortal({
 }) {
   useLiveRefresh();
 
-  const featuredItems = [hero, ...latest]
+  const featuredPool = [hero, ...latest]
     .filter((item, index, items) => Boolean(item.imageUrl) && items.findIndex((candidate) => candidate.id === item.id) === index)
-    .sort((a, b) => Number(Boolean(b.isFeatured)) - Number(Boolean(a.isFeatured)))
-    .slice(0, 5);
+    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+  const featuredItems: FeedItem[] = [hero];
+  const featuredBuckets = new Set([getSportBucket(hero.sport)]);
+
+  for (const item of featuredPool) {
+    if (featuredItems.length >= 5) break;
+    const bucket = getSportBucket(item.sport);
+    if (item.id !== hero.id && !featuredBuckets.has(bucket)) {
+      featuredItems.push(item);
+      featuredBuckets.add(bucket);
+    }
+  }
+
+  for (const item of featuredPool) {
+    if (featuredItems.length >= 5) break;
+    if (!featuredItems.some((candidate) => candidate.id === item.id)) featuredItems.push(item);
+  }
   const featuredIds = new Set(featuredItems.map((item) => item.id));
   const olderItems = latest.filter((item) => item.imageUrl && !featuredIds.has(item.id));
   const olderSections = sections
@@ -671,6 +703,8 @@ export function ArticlePage({
                 className="article-hero-image"
                 src={item.imageUrl}
                 alt={item.imageAlt || item.title}
+                fetchPriority="high"
+                decoding="async"
                 style={{ objectPosition: `${item.imageFocusX ?? 50}% ${item.imageFocusY ?? 30}%` }}
               />
               <figcaption>

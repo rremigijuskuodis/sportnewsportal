@@ -1,6 +1,5 @@
 import { loadPublishedArticleFeedForSeo } from "@/lib/supabase";
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://sportoradaras.lt";
+import { siteConfig } from "@/lib/site-config";
 
 export async function GET() {
   const articles = await loadPublishedArticleFeedForSeo();
@@ -9,8 +8,8 @@ export async function GET() {
       return `
         <item>
           <title><![CDATA[${item.title}]]></title>
-          <link>${siteUrl}/${item.slug}</link>
-          <guid isPermaLink="true">${siteUrl}/${item.slug}</guid>
+          <link>${siteConfig.url}/${item.slug}</link>
+          <guid isPermaLink="true">${siteConfig.url}/${item.slug}</guid>
           <pubDate>${new Date(item.publishedAt).toUTCString()}</pubDate>
           <description><![CDATA[${item.summary}]]></description>
         </item>
@@ -21,9 +20,9 @@ export async function GET() {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
   <rss version="2.0">
     <channel>
-      <title>SicenterHub News</title>
-      <link>${siteUrl}</link>
-      <description>Sporto naujienų portalas</description>
+      <title>${siteConfig.name}</title>
+      <link>${siteConfig.url}</link>
+      <description>${siteConfig.description}</description>
       ${items}
     </channel>
   </rss>`;

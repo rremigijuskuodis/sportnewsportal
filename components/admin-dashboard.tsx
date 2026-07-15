@@ -63,7 +63,7 @@ const defaultSettings: PortalSettings = {
 const emptyArticle: Partial<AdminArticle> = {
   title: "", summary: "", lead: "", body_markdown: "", category: "news", sport: "multi_sport",
   status: "draft", priority_score: 3, risk_level: "low", why_it_matters: "",
-  source_name: "Sporto redakcija", source_url: "", image_url: "", image_alt: "",
+  source_name: "Sporto Radaras", source_url: "", image_url: "", image_alt: "",
   is_featured: false, editor_locked: true, image_focus_x: 50, image_focus_y: 30
 };
 
@@ -161,7 +161,7 @@ export function AdminDashboard() {
   return (
     <main className="admin-shell">
       <header className="admin-header">
-        <div><span className="admin-eyebrow">Sporto redakcija</span><h1>Valdymo centras</h1></div>
+        <div><span className="admin-eyebrow">Sporto Radaras</span><h1>Valdymo centras</h1></div>
         <div className="admin-header-actions"><a href="/" target="_blank">Atidaryti portalą</a><button onClick={logout}>Atsijungti</button></div>
       </header>
 

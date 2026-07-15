@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
     priority_score: Math.max(1, Math.min(5, Number(input.priority_score || 3))),
     risk_level: String(input.risk_level || "low"),
     why_it_matters: String(input.why_it_matters || "").trim(),
-    source_name: String(input.source_name || "Sporto redakcija"),
+    source_name: String(input.source_name || "Sporto Radaras"),
     source_url: String(input.source_url || "").trim() || null,
     image_url: String(input.image_url || "").trim() || null,
     image_alt: String(input.image_alt || title).trim(),
@@ -57,4 +57,3 @@ export async function POST(request: NextRequest) {
     headers: { "Content-Type": "application/json" }
   });
 }
-

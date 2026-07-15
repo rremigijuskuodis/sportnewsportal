@@ -66,7 +66,8 @@ async function fetchSupabaseRows(format: "short" | "article") {
   });
 
   if (!response.ok) {
-    return format === "short" ? mockShortFeed : mockArticleFeed;
+    console.error(`Supabase feed request failed (${format}): ${response.status}`);
+    return [];
   }
 
   const rows = (await response.json()) as SupabaseArticleRow[];
@@ -79,7 +80,7 @@ async function fetchSupabaseRows(format: "short" | "article") {
     return Boolean(row.body_markdown || row.lead || row.summary);
   });
   if (!filteredRows.length) {
-    return format === "short" ? mockShortFeed : mockArticleFeed;
+    return [];
   }
 
   return filteredRows.map((row) => normalizeRow(row, format));
@@ -130,13 +131,6 @@ export async function loadPortalFeed() {
     fetchSupabaseRows("article")
   ]);
 
-  if (!articleFeed.length && !shortFeed.length) {
-    return {
-      shortFeed: mockShortFeed,
-      articleFeed: mockArticleFeed
-    };
-  }
-
   return {
     shortFeed,
     articleFeed
@@ -151,7 +145,7 @@ export async function loadPublishedArticleFeedForSeo() {
   endpoint.searchParams.set("status", "eq.published");
   endpoint.searchParams.set("format", "eq.article");
   endpoint.searchParams.set("order", "published_at.desc");
-  endpoint.searchParams.set("limit", "200");
+  endpoint.searchParams.set("limit", "1000");
   try {
     const response = await fetch(endpoint.toString(), {
       headers: { apikey: anonKey, Authorization: `Bearer ${anonKey}`, Accept: "application/json" },

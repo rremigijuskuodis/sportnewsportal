@@ -42,7 +42,7 @@ export function AdminLogin() {
   return (
     <main className="admin-login-shell">
       <section className="admin-login-card">
-        <span className="admin-eyebrow">Sporto redakcija</span>
+        <span className="admin-eyebrow">Sporto Radaras</span>
         <h1>Administravimas</h1>
         <p>Prisijunkite el. pastu ir slaptazodziu. Taip administravimo panele veiks stabiliai ir nereikes laukti vienkartiniu nuorodu.</p>
         <form onSubmit={submit}>

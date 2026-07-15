@@ -6,8 +6,9 @@ import { loadPortalFeed } from "@/lib/supabase";
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "Visos naujienos | Sporto Radaras",
-  description: "Lietuvos sporto naujienų archyvas: rezultatai, futbolas, krepšinis ir sporto vadyba."
+  title: "Visos naujienos",
+  description: "Lietuvos sporto naujienų archyvas: rezultatai, futbolas, krepšinis ir sporto vadyba.",
+  alternates: { canonical: "/naujienos" }
 };
 
 export default async function NewsArchivePage() {

@@ -1,4 +1,4 @@
-# SicenterHub News
+# Sporto Radaras
 
 Deployment sync marker: 2026-07-07
 
@@ -43,6 +43,8 @@ Vercel deployment'ui reikės šių env:
 - `ADMIN_PASSWORD`
 - `ADMIN_SESSION_SECRET`
 - `NEXT_PUBLIC_SITE_URL`
+- `NEXT_PUBLIC_GA_ID` (neprivalomas, GA4 matavimo ID)
+- `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` (neprivalomas, Search Console HTML patvirtinimui)
 
 ## Tolesni žingsniai
 

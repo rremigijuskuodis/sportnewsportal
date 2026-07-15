@@ -18,6 +18,24 @@ function getVisibleItems(items: FeedItem[]) {
   });
 }
 
+function hoursSince(value: string) {
+  return Math.max(0, (Date.now() - new Date(value).getTime()) / 3_600_000);
+}
+
+function editorialScore(item: FeedItem) {
+  const freshness = Math.max(0, 36 - hoursSince(item.publishedAt));
+  return (item.priorityScore || 0) * 4 + freshness + (item.isFeatured ? 3 : 0);
+}
+
+function sportBucket(value: string) {
+  const sport = value.toLocaleLowerCase("lt-LT");
+  if (sport.includes("krep") || sport.includes("basket")) return "basketball";
+  if (sport.includes("fut") || sport.includes("foot") || sport.includes("soccer")) return "football";
+  if (sport.includes("vady") || sport.includes("management")) return "management";
+  if (sport.includes("rengin") || sport.includes("event")) return "events";
+  return "other";
+}
+
 export function preparePortalData(articleFeed: FeedItem[], shortFeed: FeedItem[]) {
   const articles = getVisibleItems(
     [...articleFeed].filter((item) => Boolean(item.imageUrl)).sort(
@@ -31,7 +49,9 @@ export function preparePortalData(articleFeed: FeedItem[], shortFeed: FeedItem[]
       .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
   );
 
-  const hero = articles.find((item) => item.featured) || articles[0];
+  const freshArticles = articles.filter((item) => hoursSince(item.publishedAt) <= 36);
+  const heroPool = freshArticles.length ? freshArticles : articles.slice(0, 12);
+  const hero = [...heroPool].sort((a, b) => editorialScore(b) - editorialScore(a))[0];
   const important = articles
     .filter((item) => item.id !== hero?.id && (item.priorityScore || 0) >= 4)
     .slice(0, 4);
@@ -41,27 +61,27 @@ export function preparePortalData(articleFeed: FeedItem[], shortFeed: FeedItem[]
     {
       title: "Krepšinis",
       sport: "krepsinis",
-      items: articles.filter((item) => item.sport.toLowerCase().includes("krep")).slice(0, 3)
+      items: articles.filter((item) => sportBucket(item.sport) === "basketball").slice(0, 3)
     },
     {
       title: "Futbolas",
       sport: "futbolas",
-      items: articles.filter((item) => item.sport.toLowerCase().includes("fut")).slice(0, 3)
+      items: articles.filter((item) => sportBucket(item.sport) === "football").slice(0, 3)
     },
     {
       title: "Kitos sporto šakos",
       sport: "kitos-sporto-sakos",
-      items: articles.filter((item) => item.sport.toLowerCase().includes("kitos")).slice(0, 3)
+      items: articles.filter((item) => sportBucket(item.sport) === "other").slice(0, 6)
     },
     {
       title: "Sporto vadyba",
       sport: "sporto-vadyba",
-      items: articles.filter((item) => item.sport.toLowerCase().includes("vady")).slice(0, 3)
+      items: articles.filter((item) => sportBucket(item.sport) === "management").slice(0, 3)
     },
     {
       title: "Renginiai",
       sport: "renginiai",
-      items: articles.filter((item) => item.sport.toLowerCase().includes("rengin")).slice(0, 3)
+      items: articles.filter((item) => sportBucket(item.sport) === "events").slice(0, 3)
     }
   ].filter((group) => group.items.length > 0);
 

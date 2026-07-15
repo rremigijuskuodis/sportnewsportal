@@ -3,14 +3,15 @@ import { notFound } from "next/navigation";
 import { ArticlePage } from "@/components/portal-ui";
 import { preparePortalData } from "@/lib/portal-data";
 import { loadPortalFeed } from "@/lib/supabase";
+import { siteConfig } from "@/lib/site-config";
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const { articleFeed, shortFeed } = await loadPortalFeed();
   const item = [...articleFeed, ...shortFeed].find((entry) => entry.slug === params.slug);
-  if (!item) return { title: "Naujiena nerasta | Sporto redakcija", robots: { index: false, follow: false } };
+  if (!item) return { title: "Naujiena nerasta", robots: { index: false, follow: false } };
   const description = item.lead || item.summary;
   return {
-    title: `${item.title} | Sporto redakcija`,
+    title: item.title,
     description,
     alternates: { canonical: `/${item.slug}` },
     openGraph: {
@@ -53,9 +54,22 @@ export default async function SlugPage({
     description: item.lead || item.summary,
     datePublished: item.publishedAt,
     dateModified: item.publishedAt,
-    mainEntityOfPage: `${process.env.NEXT_PUBLIC_SITE_URL || "https://sportoradaras.lt"}/${item.slug}`,
-    author: { "@type": "Organization", name: item.sourceName || "Sporto redakcija" },
-    publisher: { "@type": "Organization", name: "Sporto redakcija" },
+    mainEntityOfPage: `${siteConfig.url}/${item.slug}`,
+    author: {
+      "@type": "Organization",
+      name: siteConfig.name,
+      url: `${siteConfig.url}/apie`
+    },
+    publisher: {
+      "@type": "Organization",
+      name: siteConfig.name,
+      url: siteConfig.url,
+      logo: {
+        "@type": "ImageObject",
+        url: `${siteConfig.url}${siteConfig.logoPath}`
+      }
+    },
+    citation: item.sourceUrl || undefined,
     image: item.imageUrl ? [item.imageUrl] : undefined
   };
 
