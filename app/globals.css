@@ -901,6 +901,20 @@ img {
   gap: 12px;
 }
 
+/* Desktop'e naujienos skaitomos poromis pagal laiką: 1 ir 2 naujausios,
+   tada 3 ir 4. Mobiliajame telefone šis srautas vėl tampa vienos kolonos. */
+.latest-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+}
+
+.latest-list .news-card p {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
 .signal-card {
   padding: 14px 0;
   border-bottom: 1px solid var(--line);
@@ -1365,6 +1379,10 @@ img {
   .news-card.compact .news-card-link,
   .hero-news,
   .newsletter-form {
+    grid-template-columns: 1fr;
+  }
+
+  .latest-list {
     grid-template-columns: 1fr;
   }
 

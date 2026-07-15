@@ -349,7 +349,7 @@ export function ShortSignalCard({ item }: { item: FeedItem }) {
         <span className={`tag ${getSportClass(item.sport)}`}>{toTitle(item.sport)}</span>
       </div>
       <h4>{item.title}</h4>
-      <p className="signal-summary">{item.summary}</p>
+      {item.summary ? <p className="signal-summary">{item.summary}</p> : null}
       {item.practicalAction ? (
         <div className="signal-action">
           <strong>Ką stebėti?</strong>
