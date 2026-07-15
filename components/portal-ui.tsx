@@ -282,7 +282,7 @@ export function HeroShowcase({
       <SportRadarSidebar
         items={radar}
         title="Sporto radaras"
-        description="Aktualiausi trumpi signalai ir AI redakcijos įžvalgos"
+        description="Aktualiausi trumpi signalai iš sporto pasaulio"
         compact
         maxItems={12}
         scrollable

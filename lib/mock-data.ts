@@ -72,7 +72,7 @@ export const mockShortFeed: FeedItem[] = [
     slug: "federacijos-tikrina-rudens-kalendoriaus-dubliavimus",
     format: "short",
     publishedAt: `${today}T12:16:00+03:00`,
-    label: "AI įžvalga",
+    label: "Sporto radaras",
     whyItMatters: "Geras kalendorius tiesiogiai veikia dalyvių skaičių, partnerių vertę ir renginių kokybę.",
     priorityScore: 3,
     shortNewsPossible: true,
