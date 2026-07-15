@@ -2,6 +2,7 @@ import type { FeedItem } from "@/lib/types";
 
 function getVisibleItems(items: FeedItem[]) {
   const seen = new Set<string>();
+  const seenTitles = new Set<string>();
 
   return items.filter((item) => {
     if (item.riskLevel === "high" && item.status !== "published") return false;
@@ -10,6 +11,9 @@ function getVisibleItems(items: FeedItem[]) {
       if (seen.has(key)) return false;
       seen.add(key);
     }
+    const titleKey = item.title.toLocaleLowerCase("lt-LT").replace(/[^a-z0-9ąčęėįšųūž]+/gi, " ").trim();
+    if (titleKey && seenTitles.has(titleKey)) return false;
+    if (titleKey) seenTitles.add(titleKey);
     return true;
   });
 }

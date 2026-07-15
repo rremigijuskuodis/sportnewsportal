@@ -916,6 +916,10 @@ img {
 
 .signal-summary {
   color: var(--muted);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
 }
 
 .signal-insight,

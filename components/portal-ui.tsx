@@ -26,7 +26,7 @@ type EventItem = {
 };
 
 const defaultSports: NavItem[] = [
-  { label: "Visos", href: "/#naujienos" },
+  { label: "Visos", href: "/naujienos" },
   { label: "Krepšinis", href: "/#krepsinis" },
   { label: "Futbolas", href: "/#futbolas" },
   { label: "Kitos sporto šakos", href: "/#kitos-sporto-sakos" },
@@ -342,9 +342,6 @@ export function TopStoriesGrid({ items }: { items: FeedItem[] }) {
 }
 
 export function ShortSignalCard({ item }: { item: FeedItem }) {
-  const whyText = getWhyText(item);
-  const showWhy = Boolean(whyText && whyText.trim() !== item.summary.trim());
-
   return (
     <article className="signal-card">
       <div className="signal-topline">
@@ -353,12 +350,6 @@ export function ShortSignalCard({ item }: { item: FeedItem }) {
       </div>
       <h4>{item.title}</h4>
       <p className="signal-summary">{item.summary}</p>
-      {showWhy ? (
-        <div className="signal-insight">
-          <strong>Kodėl svarbu?</strong>
-          <span>{whyText}</span>
-        </div>
-      ) : null}
       {item.practicalAction ? (
         <div className="signal-action">
           <strong>Ką stebėti?</strong>
@@ -578,7 +569,7 @@ export function Footer() {
         <p>Modernus Lietuvos sporto naujienų portalas su gyvu radaru ir redakciniu filtru.</p>
       </div>
       <div className="footer-links">
-        <a href="/#naujienos">Naujienos</a>
+        <a href="/naujienos">Naujienos</a>
         <a href="/radaras">Sporto radaras</a>
         <Link href="/kontaktai">Kontaktai</Link>
       </div>

@@ -53,7 +53,8 @@ async function fetchSupabaseRows(format: "short" | "article") {
   endpoint.searchParams.set("select", "*");
   endpoint.searchParams.set("status", "eq.published");
   endpoint.searchParams.set("order", "published_at.desc");
-  endpoint.searchParams.set("limit", format === "short" ? "20" : "32");
+  // Pilnam straipsnių archyvui reikia daugiau nei pagrindinio puslapio kortelių.
+  endpoint.searchParams.set("limit", format === "short" ? "20" : "200");
 
   const response = await fetch(endpoint.toString(), {
     headers: {
