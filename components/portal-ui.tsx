@@ -90,14 +90,6 @@ function getSportClass(value: string) {
   return "is-other";
 }
 
-function getSportBucket(value: string) {
-  const normalized = value.toLowerCase();
-  if (normalized.includes("krep") || normalized.includes("basket")) return "basketball";
-  if (normalized.includes("fut") || normalized.includes("foot") || normalized.includes("soccer")) return "football";
-  if (normalized.includes("vady") || normalized.includes("management")) return "management";
-  return "other";
-}
-
 function getWhyText(item: FeedItem) {
   return item.whyItMatters || item.lead || item.summary;
 }
@@ -612,22 +604,12 @@ export function HomePortal({
   const featuredPool = [hero, ...latest]
     .filter((item, index, items) => Boolean(item.imageUrl) && items.findIndex((candidate) => candidate.id === item.id) === index)
     .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
-  const featuredItems: FeedItem[] = [hero];
-  const featuredBuckets = new Set([getSportBucket(hero.sport)]);
-
-  for (const item of featuredPool) {
-    if (featuredItems.length >= 5) break;
-    const bucket = getSportBucket(item.sport);
-    if (item.id !== hero.id && !featuredBuckets.has(bucket)) {
-      featuredItems.push(item);
-      featuredBuckets.add(bucket);
-    }
-  }
-
-  for (const item of featuredPool) {
-    if (featuredItems.length >= 5) break;
-    if (!featuredItems.some((candidate) => candidate.id === item.id)) featuredItems.push(item);
-  }
+  // Hero karusele rodo pagrindini ir keturias naujausias tinkamas publikacijas.
+  // Taip naujienos nebeuzleidzia vietos senesniems vien del sporto sakos balanso.
+  const featuredItems: FeedItem[] = [
+    hero,
+    ...featuredPool.filter((item) => item.id !== hero.id)
+  ].slice(0, 5);
   const featuredIds = new Set(featuredItems.map((item) => item.id));
   const olderItems = latest.filter((item) => item.imageUrl && !featuredIds.has(item.id));
   const olderSections = sections

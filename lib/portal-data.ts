@@ -22,10 +22,8 @@ function hoursSince(value: string) {
   return Math.max(0, (Date.now() - new Date(value).getTime()) / 3_600_000);
 }
 
-function editorialScore(item: FeedItem) {
-  const freshness = Math.max(0, 36 - hoursSince(item.publishedAt));
-  return (item.priorityScore || 0) * 4 + freshness + (item.isFeatured ? 3 : 0);
-}
+const HERO_FRESH_HOURS = 36;
+const MANUAL_FEATURE_HOURS = 6;
 
 function sportBucket(value: string) {
   const sport = value.toLocaleLowerCase("lt-LT");
@@ -49,9 +47,14 @@ export function preparePortalData(articleFeed: FeedItem[], shortFeed: FeedItem[]
       .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
   );
 
-  const freshArticles = articles.filter((item) => hoursSince(item.publishedAt) <= 36);
+  const freshArticles = articles.filter((item) => hoursSince(item.publishedAt) <= HERO_FRESH_HOURS);
   const heroPool = freshArticles.length ? freshArticles : articles.slice(0, 12);
-  const hero = [...heroPool].sort((a, b) => editorialScore(b) - editorialScore(a))[0];
+  const manuallyFeatured = heroPool.find(
+    (item) => item.isFeatured && hoursSince(item.publishedAt) <= MANUAL_FEATURE_HOURS
+  );
+  // Pagal nutylejima Hero visada seka naujausia tinkama publikacija.
+  // Redaktoriaus isFeatured pasirinkimas turi pirmenybe tik pirmas 6 valandas.
+  const hero = manuallyFeatured || heroPool[0];
   const important = articles
     .filter((item) => item.id !== hero?.id && (item.priorityScore || 0) >= 4)
     .slice(0, 4);
