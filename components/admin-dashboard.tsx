@@ -78,8 +78,17 @@ export function AdminDashboard() {
   const [busy, setBusy] = useState(false);
 
   async function load() {
-    const me = await fetch("/api/admin/me", { cache: "no-store" });
-    if (!me.ok) { router.replace("/admin/login"); return; }
+    let me: Response | null = null;
+    // A fresh deployment can briefly cold-start the auth route. Retry before
+    // treating the visitor as logged out, so the panel does not flash and vanish.
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      try {
+        me = await fetch(`/api/admin/me?ts=${Date.now()}`, { cache: "no-store" });
+        if (me.ok) break;
+      } catch { /* retry */ }
+      await new Promise((resolve) => window.setTimeout(resolve, 350 * (attempt + 1)));
+    }
+    if (!me?.ok) { router.replace("/admin/login?error=session"); return; }
     const [articleResponse, settingsResponse] = await Promise.all([
       fetch("/api/admin/articles", { cache: "no-store" }),
       fetch("/api/admin/settings", { cache: "no-store" })

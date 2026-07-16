@@ -5,7 +5,8 @@ export const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || "r.remigijus.kuodis@gmail
 export const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "";
 export const ADMIN_ACCESS_COOKIE = "portal-admin-access";
 export const ADMIN_REFRESH_COOKIE = "portal-admin-refresh";
-export const ADMIN_SESSION_COOKIE = "portal-admin-session";
+// Versioned name avoids collisions with stale cookies created by older deployments.
+export const ADMIN_SESSION_COOKIE = "portal-admin-session-v2";
 
 function getAdminSessionSecret() {
   return process.env.ADMIN_SESSION_SECRET || process.env.SUPABASE_SERVICE_ROLE_KEY || "";
