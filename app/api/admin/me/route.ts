@@ -8,13 +8,15 @@ import {
   getAdminUser
 } from "@/lib/admin-server";
 
+export const runtime = "nodejs";
+
 export async function GET(request: NextRequest) {
   if (hasAdminSession(request)) {
-    return NextResponse.json({ email: ADMIN_EMAIL });
+    return NextResponse.json({ email: ADMIN_EMAIL }, { headers: { "Cache-Control": "no-store, no-cache, must-revalidate" } });
   }
 
   const user = await getAdminUser(request);
-  if (user) return NextResponse.json({ email: user.email });
+  if (user) return NextResponse.json({ email: user.email }, { headers: { "Cache-Control": "no-store, no-cache, must-revalidate" } });
 
   const refreshToken = request.cookies.get(ADMIN_REFRESH_COOKIE)?.value;
   if (!refreshToken) return NextResponse.json({ error: "Neprisijungta." }, { status: 401 });
