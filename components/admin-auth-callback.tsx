@@ -1,10 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 
 export function AdminAuthCallback() {
-  const router = useRouter();
   const [message, setMessage] = useState("Tikrinama prisijungimo nuoroda…");
 
   useEffect(() => {
@@ -28,11 +26,11 @@ export function AdminAuthCallback() {
         return;
       }
       window.history.replaceState({}, "", "/admin/auth/callback");
-      router.replace("/admin");
-      router.refresh();
+      window.location.assign("/admin");
+    }).catch(() => {
+      setMessage("Nepavyko išsaugoti prisijungimo. Pabandykite dar kartą.");
     });
-  }, [router]);
+  }, []);
 
   return <main className="admin-login-shell"><section className="admin-login-card"><h1>{message}</h1></section></main>;
 }
-

@@ -1,10 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 
 export function AdminAuthFragmentBridge() {
-  const router = useRouter();
   const [isSigningIn, setIsSigningIn] = useState(false);
 
   useEffect(() => {
@@ -25,14 +23,18 @@ export function AdminAuthFragmentBridge() {
     }).then(async (response) => {
       if (!response.ok) {
         setIsSigningIn(false);
-        router.replace("/admin/login?error=invalid_link");
+        window.location.assign("/admin/login?error=invalid_link");
         return;
       }
 
-      router.replace("/admin");
-      router.refresh();
+      // Full reload is intentional: this root component survives soft route
+      // changes, which previously left the sign-in overlay visible.
+      window.location.assign("/admin");
+    }).catch(() => {
+      setIsSigningIn(false);
+      window.location.assign("/admin/login?error=invalid_link");
     });
-  }, [router]);
+  }, []);
 
   if (!isSigningIn) return null;
 
