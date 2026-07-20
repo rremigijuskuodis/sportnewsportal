@@ -9,15 +9,13 @@ import {
 export const runtime = "nodejs";
 
 function sessionCookieOptions(request: NextRequest) {
-  const host = request.nextUrl.hostname.toLowerCase();
   const forwardedProto = request.headers.get("x-forwarded-proto");
   const secure = process.env.NODE_ENV === "production" || request.nextUrl.protocol === "https:" || forwardedProto === "https";
   // Keep the session when the visitor moves between the www and non-www
   // production host. Never set this domain on Vercel preview URLs.
-  const domain = host === "sportoradaras.lt" || host.endsWith(".sportoradaras.lt")
-    ? ".sportoradaras.lt"
-    : undefined;
-  return { httpOnly: true, secure, sameSite: "lax" as const, path: "/", maxAge: 60 * 60 * 24 * 14, ...(domain ? { domain } : {}) };
+  // Host-only cookies avoid duplicate-cookie ordering problems after a
+  // visitor switches between www and the canonical host.
+  return { httpOnly: true, secure, sameSite: "lax" as const, path: "/", maxAge: 60 * 60 * 24 * 14 };
 }
 
 export async function POST(request: NextRequest) {

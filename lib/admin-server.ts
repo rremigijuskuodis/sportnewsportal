@@ -9,7 +9,10 @@ export const ADMIN_REFRESH_COOKIE = "portal-admin-refresh";
 export const ADMIN_SESSION_COOKIE = "portal-admin-session-v2";
 
 function getAdminSessionSecret() {
-  return process.env.ADMIN_SESSION_SECRET || process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+  // The password is already required for password login and is available in
+  // the same deployment. Prefer it so a missing/rotated optional secret can
+  // never invalidate a freshly created admin session.
+  return ADMIN_PASSWORD || process.env.ADMIN_SESSION_SECRET || process.env.SUPABASE_SERVICE_ROLE_KEY || "";
 }
 
 function signAdminSession(value: string) {
