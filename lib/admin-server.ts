@@ -1,7 +1,9 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 import type { NextRequest } from "next/server";
 
-export const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || "r.remigijus.kuodis@gmail.com").toLowerCase();
+// Single-owner editorial access: the account identity is part of the portal,
+// not a deployment setting that can be mistyped in Vercel.
+export const ADMIN_EMAIL = "r.remigijus.kuodis@gmail.com";
 export const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "";
 export const ADMIN_ACCESS_COOKIE = "portal-admin-access";
 export const ADMIN_REFRESH_COOKIE = "portal-admin-refresh";

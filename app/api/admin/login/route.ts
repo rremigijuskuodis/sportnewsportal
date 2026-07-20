@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
-  ADMIN_EMAIL,
   ADMIN_PASSWORD,
   ADMIN_SESSION_COOKIE,
   createAdminSessionToken
@@ -19,14 +18,9 @@ function sessionCookieOptions(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const { email, password } = (await request.json().catch(() => ({}))) as {
-    email?: string;
+  const { password } = (await request.json().catch(() => ({}))) as {
     password?: string;
   };
-
-  if (String(email || "").trim().toLowerCase() !== ADMIN_EMAIL) {
-    return NextResponse.json({ error: "Siam el. pastui administratoriaus prieiga nesuteikta." }, { status: 403 });
-  }
 
   if (!ADMIN_PASSWORD) {
     return NextResponse.json({ error: "Nesukonfiguruotas ADMIN_PASSWORD aplinkos kintamasis." }, { status: 500 });
