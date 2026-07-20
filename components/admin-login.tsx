@@ -45,6 +45,7 @@ export function AdminLogin() {
           <button type="submit" disabled={busy}>{busy ? "Jungiamasi..." : "Prisijungti"}</button>
         </form>
         {message ? <p className="admin-message">{message}</p> : null}
+        <a href="/admin/setup">Pirmas prisijungimas / aktyvuoti paskyrą</a>
         <a href="/">← Grizti i portala</a>
       </section>
     </main>

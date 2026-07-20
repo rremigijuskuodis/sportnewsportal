@@ -69,13 +69,15 @@ const emptyArticle: Partial<AdminArticle> = {
 
 export function AdminDashboard() {
   const router = useRouter();
-  const [tab, setTab] = useState<"articles" | "editor" | "settings">("articles");
+  const [tab, setTab] = useState<"articles" | "editor" | "settings" | "account">("articles");
   const [articles, setArticles] = useState<AdminArticle[]>([]);
   const [draft, setDraft] = useState<Partial<AdminArticle>>(emptyArticle);
   const [settings, setSettings] = useState<PortalSettings | null>(null);
   const [settingsError, setSettingsError] = useState("");
   const [message, setMessage] = useState("Kraunama…");
   const [busy, setBusy] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
 
   async function load() {
     let me: Response | null = null;
@@ -167,6 +169,17 @@ export function AdminDashboard() {
     router.replace("/admin/login");
   }
 
+  async function changePassword(event: FormEvent) {
+    event.preventDefault();
+    if (newPassword !== confirmNewPassword) { setMessage("Slaptažodžiai nesutampa."); return; }
+    setBusy(true);
+    const response = await fetch("/api/admin/password", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ password: newPassword }) });
+    const data = await response.json().catch(() => ({}));
+    setMessage(response.ok ? "Slaptažodis pakeistas." : (data.error || "Slaptažodžio pakeisti nepavyko."));
+    if (response.ok) { setNewPassword(""); setConfirmNewPassword(""); }
+    setBusy(false);
+  }
+
   return (
     <main className="admin-shell">
       <header className="admin-header">
@@ -178,6 +191,7 @@ export function AdminDashboard() {
         <button className={tab === "articles" ? "active" : ""} onClick={() => setTab("articles")}>Straipsniai</button>
         <button className={tab === "editor" ? "active" : ""} onClick={() => editArticle()}>Naujas straipsnis</button>
         <button className={tab === "settings" ? "active" : ""} onClick={() => setTab("settings")}>Automatika</button>
+        <button className={tab === "account" ? "active" : ""} onClick={() => setTab("account")}>Paskyra</button>
       </nav>
       {message ? <div className="admin-notice">{message}</div> : null}
 
@@ -233,6 +247,17 @@ export function AdminDashboard() {
             <label className="admin-check"><input type="checkbox" checked={settings.auto_approve_enabled} onChange={(e) => setSettings({...settings, auto_approve_enabled:e.target.checked})} /> Saugus automatinis patvirtinimas</label>
             <label>Minimalus prioritetas<input type="number" min="1" max="5" value={settings.minimum_priority} onChange={(e) => setSettings({...settings, minimum_priority:Number(e.target.value)})} /></label>
           </div>
+        </form>
+      ) : null}
+
+      {tab === "account" ? (
+        <form className="admin-panel admin-editor" onSubmit={changePassword}>
+          <div className="admin-panel-head"><div><h2>Paskyros saugumas</h2><p>Keiskite administratoriaus slaptažodį kada panorėję.</p></div></div>
+          <div className="admin-form-grid">
+            <label>Naujas slaptažodis<input type="password" minLength={12} value={newPassword} onChange={(event) => setNewPassword(event.target.value)} required /></label>
+            <label>Pakartokite slaptažodį<input type="password" minLength={12} value={confirmNewPassword} onChange={(event) => setConfirmNewPassword(event.target.value)} required /></label>
+          </div>
+          <div className="admin-save-actions"><button className="admin-primary" disabled={busy}>Išsaugoti naują slaptažodį</button></div>
         </form>
       ) : null}
     </main>
