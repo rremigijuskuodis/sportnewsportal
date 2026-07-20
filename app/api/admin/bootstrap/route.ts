@@ -21,7 +21,8 @@ export async function POST(request: NextRequest) {
     body: JSON.stringify({ email: ADMIN_EMAIL, password, options: { emailRedirectTo: `${request.nextUrl.origin}/admin/auth/callback` } }),
     cache: "no-store"
   });
-  const result = await saved.json().catch(() => ({})) as { session?: unknown; msg?: string; message?: string };
+  const result = await saved.json().catch(() => ({})) as { session?: unknown; user?: { identities?: unknown[] }; msg?: string; message?: string };
   if (!saved.ok) return NextResponse.json({ error: result.msg || result.message || "Paskyros sukurti nepavyko." }, { status: 400 });
-  return NextResponse.json({ ok: true, requiresEmailConfirmation: !result.session });
+  const alreadyRegistered = Array.isArray(result.user?.identities) && result.user.identities.length === 0;
+  return NextResponse.json({ ok: true, alreadyRegistered, requiresEmailConfirmation: !result.session && !alreadyRegistered });
 }
