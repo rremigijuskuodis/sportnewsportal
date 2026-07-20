@@ -13,27 +13,15 @@ export async function POST(request: NextRequest) {
   }
   if (String(password || "").length < 12) return NextResponse.json({ error: "Sukurkite bent 12 simbolių slaptažodį." }, { status: 400 });
 
-  const { url, serviceRoleKey } = getAdminSupabaseEnv();
-  if (!url || !serviceRoleKey) return NextResponse.json({ error: "Trūksta Supabase administratoriaus prieigos." }, { status: 500 });
-
-  const usersResponse = await fetch(new URL("/auth/v1/admin/users?page=1&per_page=1000", url), {
-    headers: { apikey: serviceRoleKey, Authorization: `Bearer ${serviceRoleKey}` }, cache: "no-store"
-  });
-  if (!usersResponse.ok) return NextResponse.json({ error: "Nepavyko patikrinti administratoriaus paskyros." }, { status: 500 });
-  const usersData = await usersResponse.json() as { users?: Array<{ id: string; email?: string; app_metadata?: { portal_bootstrap_complete?: boolean } }> };
-  const existing = usersData.users?.find((user) => user.email?.toLowerCase() === ADMIN_EMAIL);
-  if (existing?.app_metadata?.portal_bootstrap_complete) {
-    return NextResponse.json({ error: "Paskyra jau aktyvuota. Slaptažodį keiskite administravimo skiltyje „Paskyra“." }, { status: 409 });
-  }
-  const endpoint = existing ? `/auth/v1/admin/users/${existing.id}` : "/auth/v1/admin/users";
-  const saved = await fetch(new URL(endpoint, url), {
-    method: existing ? "PUT" : "POST",
-    headers: { apikey: serviceRoleKey, Authorization: `Bearer ${serviceRoleKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify(existing
-      ? { password, app_metadata: { portal_bootstrap_complete: true } }
-      : { email: ADMIN_EMAIL, password, email_confirm: true, app_metadata: { portal_bootstrap_complete: true } }),
+  const { url, anonKey } = getAdminSupabaseEnv();
+  if (!url || !anonKey) return NextResponse.json({ error: "Trūksta Supabase prisijungimo nustatymų." }, { status: 500 });
+  const saved = await fetch(new URL("/auth/v1/signup", url), {
+    method: "POST",
+    headers: { apikey: anonKey, "Content-Type": "application/json" },
+    body: JSON.stringify({ email: ADMIN_EMAIL, password, options: { emailRedirectTo: `${request.nextUrl.origin}/admin/auth/callback` } }),
     cache: "no-store"
   });
-  if (!saved.ok) return NextResponse.json({ error: "Paskyros išsaugoti nepavyko." }, { status: 500 });
-  return NextResponse.json({ ok: true });
+  const result = await saved.json().catch(() => ({})) as { session?: unknown; msg?: string; message?: string };
+  if (!saved.ok) return NextResponse.json({ error: result.msg || result.message || "Paskyros sukurti nepavyko." }, { status: 400 });
+  return NextResponse.json({ ok: true, requiresEmailConfirmation: !result.session });
 }

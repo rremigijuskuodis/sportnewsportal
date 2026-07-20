@@ -18,6 +18,11 @@ export function AdminSetup() {
     const response = await fetch("/api/admin/bootstrap", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ activationCode, password }) });
     const data = await response.json().catch(() => ({}));
     if (!response.ok) { setMessage(data.error || "Aktyvuoti nepavyko."); setBusy(false); return; }
+    if (data.requiresEmailConfirmation) {
+      setMessage("Paskyra sukurta. Patvirtinkite laišką, kurį gavote į r.remigijus.kuodis@gmail.com, ir tada prisijunkite.");
+      setBusy(false);
+      return;
+    }
     router.replace("/admin/login");
   }
 
