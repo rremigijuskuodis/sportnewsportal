@@ -20,13 +20,18 @@ export async function POST(request: NextRequest) {
     headers: { apikey: serviceRoleKey, Authorization: `Bearer ${serviceRoleKey}` }, cache: "no-store"
   });
   if (!usersResponse.ok) return NextResponse.json({ error: "Nepavyko patikrinti administratoriaus paskyros." }, { status: 500 });
-  const usersData = await usersResponse.json() as { users?: Array<{ id: string; email?: string }> };
+  const usersData = await usersResponse.json() as { users?: Array<{ id: string; email?: string; app_metadata?: { portal_bootstrap_complete?: boolean } }> };
   const existing = usersData.users?.find((user) => user.email?.toLowerCase() === ADMIN_EMAIL);
+  if (existing?.app_metadata?.portal_bootstrap_complete) {
+    return NextResponse.json({ error: "Paskyra jau aktyvuota. Slaptažodį keiskite administravimo skiltyje „Paskyra“." }, { status: 409 });
+  }
   const endpoint = existing ? `/auth/v1/admin/users/${existing.id}` : "/auth/v1/admin/users";
   const saved = await fetch(new URL(endpoint, url), {
     method: existing ? "PUT" : "POST",
     headers: { apikey: serviceRoleKey, Authorization: `Bearer ${serviceRoleKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify(existing ? { password } : { email: ADMIN_EMAIL, password, email_confirm: true }),
+    body: JSON.stringify(existing
+      ? { password, app_metadata: { portal_bootstrap_complete: true } }
+      : { email: ADMIN_EMAIL, password, email_confirm: true, app_metadata: { portal_bootstrap_complete: true } }),
     cache: "no-store"
   });
   if (!saved.ok) return NextResponse.json({ error: "Paskyros išsaugoti nepavyko." }, { status: 500 });
