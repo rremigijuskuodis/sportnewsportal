@@ -72,7 +72,13 @@ create table if not exists public.portal_settings (
   articles_per_run integer not null default 1 check (articles_per_run between 1 and 10),
   generation_start_hour integer not null default 8 check (generation_start_hour between 0 and 23),
   generation_end_hour integer not null default 23 check (generation_end_hour between 0 and 23),
-  article_model text not null default 'gpt-5.4-mini' check (article_model in ('gpt-5.4-mini', 'gpt-5.4')),
+  article_model text not null default 'gpt-5.6-luna' check (article_model in (
+    'gpt-5.4-mini',
+    'gpt-5.4',
+    'gpt-5.6-luna',
+    'gpt-5.6-terra',
+    'gpt-5.6-sol'
+  )),
   radar_enabled boolean not null default true,
   radar_interval_minutes integer not null default 120 check (radar_interval_minutes between 15 and 360),
   radar_model text not null default 'gpt-5.4-mini',
