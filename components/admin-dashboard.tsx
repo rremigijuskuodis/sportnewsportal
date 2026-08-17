@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
 type AdminArticle = {
@@ -26,6 +26,7 @@ type AdminArticle = {
   image_focus_y?: number;
   published_at?: string;
   updated_at?: string;
+  created_at?: string;
 };
 
 type PortalSettings = {
@@ -71,6 +72,7 @@ export function AdminDashboard() {
   const router = useRouter();
   const [tab, setTab] = useState<"articles" | "editor" | "settings" | "account">("articles");
   const [articles, setArticles] = useState<AdminArticle[]>([]);
+  const [dateOrder, setDateOrder] = useState<"desc" | "asc">("desc");
   const [draft, setDraft] = useState<Partial<AdminArticle>>(emptyArticle);
   const [settings, setSettings] = useState<PortalSettings | null>(null);
   const [settingsError, setSettingsError] = useState("");
@@ -114,6 +116,12 @@ export function AdminDashboard() {
     const keepAlive = window.setInterval(() => fetch("/api/admin/me", { cache: "no-store" }), 45 * 60 * 1000);
     return () => window.clearInterval(keepAlive);
   }, []);
+
+  const sortedArticles = useMemo(() => [...articles].sort((a, b) => {
+    const aTime = Date.parse(a.published_at || a.updated_at || a.created_at || "") || 0;
+    const bTime = Date.parse(b.published_at || b.updated_at || b.created_at || "") || 0;
+    return dateOrder === "desc" ? bTime - aTime : aTime - bTime;
+  }), [articles, dateOrder]);
 
   function editArticle(article?: AdminArticle) {
     setDraft(article ? { ...article } : { ...emptyArticle });
@@ -198,8 +206,8 @@ export function AdminDashboard() {
       {tab === "articles" ? (
         <section className="admin-panel">
           <div className="admin-panel-head"><div><h2>Visi straipsniai</h2><p>AI ir rankiniai įrašai vienoje vietoje.</p></div><button className="admin-primary" onClick={() => editArticle()}>+ Naujas</button></div>
-          <div className="admin-table-wrap"><table className="admin-table"><thead><tr><th>Antraštė</th><th>Būsena</th><th>Prioritetas</th><th>Data</th><th /></tr></thead><tbody>
-            {articles.map((article) => <tr key={article.id}><td><strong>{article.title}</strong><small>{article.sport} · {article.source_name}</small></td><td><span className={`admin-status ${article.status}`}>{article.status}</span></td><td>{article.priority_score || 3}/5</td><td>{article.published_at ? new Date(article.published_at).toLocaleString("lt-LT") : "Juodraštis"}</td><td><button onClick={() => editArticle(article)}>Redaguoti</button></td></tr>)}
+          <div className="admin-table-wrap"><table className="admin-table"><thead><tr><th>Antraštė</th><th>Būsena</th><th>Prioritetas</th><th><button className="admin-sort-button" onClick={() => setDateOrder((current) => current === "desc" ? "asc" : "desc")} aria-label="Keisti datos rikiavimą">Data {dateOrder === "desc" ? "↓" : "↑"}</button></th><th /></tr></thead><tbody>
+            {sortedArticles.map((article) => <tr key={article.id}><td><strong>{article.title}</strong><small>{article.sport} · {article.source_name}</small></td><td><span className={`admin-status ${article.status}`}>{article.status}</span></td><td>{article.priority_score || 3}/5</td><td>{article.published_at ? new Date(article.published_at).toLocaleString("lt-LT") : "Juodraštis"}</td><td><button onClick={() => editArticle(article)}>Redaguoti</button></td></tr>)}
           </tbody></table></div>
         </section>
       ) : null}

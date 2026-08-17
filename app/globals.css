@@ -1618,6 +1618,8 @@ img {
 .admin-table th,
 .admin-table td { padding: 14px 12px; border-bottom: 1px solid #e6ebf1; text-align: left; vertical-align: middle; }
 .admin-table th { color: #6c7888; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.admin-sort-button { border: 0; padding: 0; background: transparent; color: inherit; font: inherit; font-weight: 800; letter-spacing: inherit; text-transform: inherit; cursor: pointer; }
+.admin-sort-button:hover { color: #1763ee; }
 .admin-table td:first-child { min-width: 330px; }
 .admin-table td small { display: block; margin-top: 5px; color: #7b8797; }
 .admin-status { display: inline-flex; padding: 6px 9px; border-radius: 999px; background: #eef2f6; font-size: 0.8rem; font-weight: 800; }
