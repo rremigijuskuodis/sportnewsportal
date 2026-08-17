@@ -29,8 +29,7 @@ const defaultSports: NavItem[] = [
   { label: "Visos", href: "/naujienos" },
   { label: "Krepšinis", href: "/#krepsinis" },
   { label: "Futbolas", href: "/#futbolas" },
-  { label: "Kitos sporto šakos", href: "/#kitos-sporto-sakos" },
-  { label: "Sporto vadyba", href: "/#sporto-vadyba" }
+  { label: "Kitos sporto šakos", href: "/#kitos-sporto-sakos" }
 ];
 
 function formatTime(value: string, withDate = false) {
