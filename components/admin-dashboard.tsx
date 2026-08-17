@@ -53,7 +53,7 @@ const defaultSettings: PortalSettings = {
   articles_per_run: 1,
   generation_start_hour: 8,
   generation_end_hour: 23,
-  article_model: "gpt-5.4-mini",
+  article_model: "gpt-5.6-luna",
   radar_enabled: true,
   radar_interval_minutes: 120,
   radar_model: "gpt-5.4-mini",
@@ -249,7 +249,7 @@ export function AdminDashboard() {
             <label>Straipsnių vienu paleidimu<input type="number" min="1" max="10" value={settings.articles_per_run} onChange={(e) => setSettings({...settings, articles_per_run:Number(e.target.value)})} /></label>
             <label>Generuoti nuo (val.)<input type="number" min="0" max="23" value={settings.generation_start_hour} onChange={(e) => setSettings({...settings, generation_start_hour:Number(e.target.value)})} /></label>
             <label>Generuoti iki (val.)<input type="number" min="0" max="23" value={settings.generation_end_hour} onChange={(e) => setSettings({...settings, generation_end_hour:Number(e.target.value)})} /></label>
-            <label>Straipsnių AI modelis<select value={settings.article_model} onChange={(e) => setSettings({...settings, article_model:e.target.value})}><option value="gpt-5.4-mini">GPT-5.4 mini</option><option value="gpt-5.4">GPT-5.4</option></select></label>
+            <label>Straipsnių AI modelis<select value={settings.article_model} onChange={(e) => setSettings({...settings, article_model:e.target.value})}><option value="gpt-5.6-luna">GPT-5.6 Luna — rekomenduojama nuolatiniam srautui</option><option value="gpt-5.6-terra">GPT-5.6 Terra — aukštesnė kokybė svarbioms temoms</option><option value="gpt-5.6-sol">GPT-5.6 Sol — maksimaliai kokybei</option><option value="gpt-5.4-mini">GPT-5.4 mini</option><option value="gpt-5.4">GPT-5.4</option></select></label>
             <label className="admin-check"><input type="checkbox" checked={settings.radar_enabled} onChange={(e) => setSettings({...settings, radar_enabled:e.target.checked})} /> Sporto radaras įjungtas</label>
             <label>Radaro intervalas (min.)<input type="number" min="15" step="15" max="360" value={settings.radar_interval_minutes} onChange={(e) => setSettings({...settings, radar_interval_minutes:Number(e.target.value)})} /></label>
             <label className="admin-check"><input type="checkbox" checked={settings.auto_approve_enabled} onChange={(e) => setSettings({...settings, auto_approve_enabled:e.target.checked})} /> Saugus automatinis patvirtinimas</label>
