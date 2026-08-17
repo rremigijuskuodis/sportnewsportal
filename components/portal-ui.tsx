@@ -356,12 +356,6 @@ export function ShortSignalCard({ item }: { item: FeedItem }) {
       </div>
       <h4>{item.title}</h4>
       {item.summary ? <p className="signal-summary">{item.summary}</p> : null}
-      {item.practicalAction ? (
-        <div className="signal-action">
-          <strong>Ką stebėti?</strong>
-          <span>{item.practicalAction}</span>
-        </div>
-      ) : null}
     </article>
   );
 }
