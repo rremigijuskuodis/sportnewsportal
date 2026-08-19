@@ -12,6 +12,11 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   metadataBase: new URL(siteConfig.url),
   applicationName: siteConfig.name,
+  icons: {
+    icon: [{ url: "/brand/favicon-sr.svg?v=20260819", type: "image/svg+xml" }],
+    shortcut: ["/brand/favicon-sr.svg?v=20260819"],
+    apple: [{ url: "/brand/favicon-sr.svg?v=20260819", type: "image/svg+xml" }]
+  },
   authors: [{ name: siteConfig.name, url: siteConfig.url }],
   creator: siteConfig.name,
   publisher: siteConfig.publisher,
