@@ -8,6 +8,33 @@ const allowedFields = new Set([
   "is_featured", "editor_locked", "editor_notes", "scheduled_at", "image_focus_x", "image_focus_y"
 ]);
 
+function socialText(article: Record<string, unknown>) {
+  const title = String(article.title || "Sporto Radaro naujiena").trim();
+  const summary = String(article.summary || "").replace(/\s+/g, " ").trim();
+  return (summary ? `${title}\n\n${summary}` : title).slice(0, 900);
+}
+
+async function queueFacebookPost(request: NextRequest, article: Record<string, unknown>) {
+  const articleId = String(article.id || "").trim();
+  if (!articleId) return;
+
+  const queued = await adminRestFetch(request, "/rest/v1/social_queue?on_conflict=article_id,network", {
+    method: "POST",
+    headers: { Prefer: "resolution=ignore-duplicates,return=minimal" },
+    body: JSON.stringify({
+      article_id: articleId,
+      network: "facebook",
+      post_text: socialText(article),
+      post_image_url: String(article.image_url || "").trim() || null,
+      status: "queued",
+      scheduled_at: new Date().toISOString()
+    })
+  });
+  if (queued.user && queued.response && !queued.response.ok) {
+    console.error("Nepavyko pridėti rankinio straipsnio į Facebook eilę", await queued.response.text());
+  }
+}
+
 export async function PATCH(request: NextRequest, context: { params: { id: string } }) {
   const input = (await request.json().catch(() => ({}))) as Record<string, unknown>;
   const patch: Record<string, unknown> = {};
@@ -27,7 +54,13 @@ export async function PATCH(request: NextRequest, context: { params: { id: strin
     body: JSON.stringify(patch)
   });
   if (!result.user) return NextResponse.json({ error: "Neprisijungta." }, { status: 401 });
-  return new NextResponse(await result.response!.text(), {
+  const responseText = await result.response!.text();
+  if (result.response!.ok && patch.status === "published") {
+    const published = JSON.parse(responseText || "[]");
+    const article = Array.isArray(published) ? published[0] : published;
+    if (article) await queueFacebookPost(request, article);
+  }
+  return new NextResponse(responseText, {
     status: result.response!.status,
     headers: { "Content-Type": "application/json" }
   });
