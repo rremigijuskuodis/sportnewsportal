@@ -257,7 +257,6 @@ export function HeroShowcase({
             <time dateTime={activeItem.publishedAt}>{formatDate(activeItem.publishedAt)}</time>
           </div>
 
-          <span className="section-kicker light">Pagrindinė naujiena</span>
           <h1 className={getHeroTitleClass(activeItem.title)}>{activeItem.title}</h1>
           <p className="hero-lead">{activeItem.lead || activeItem.summary}</p>
 
