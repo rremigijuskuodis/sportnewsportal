@@ -78,6 +78,7 @@ export function AdminDashboard() {
   const [settingsError, setSettingsError] = useState("");
   const [message, setMessage] = useState("Kraunama…");
   const [busy, setBusy] = useState(false);
+  const [imageUploading, setImageUploading] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
 
@@ -130,6 +131,43 @@ export function AdminDashboard() {
 
   function field(name: keyof AdminArticle, value: unknown) {
     setDraft((current) => ({ ...current, [name]: value }));
+  }
+
+  async function uploadImage(file?: File) {
+    if (!file) return;
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+    const maxBytes = 6 * 1024 * 1024;
+    if (!allowedTypes.includes(file.type)) {
+      setMessage("Įkelkite JPG, PNG, WebP arba GIF formato nuotrauką.");
+      return;
+    }
+    if (file.size > maxBytes) {
+      setMessage("Nuotrauka per didelė. Didžiausias leistinas dydis – 6 MB.");
+      return;
+    }
+
+    setImageUploading(true);
+    setMessage("");
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+      const response = await fetch("/api/admin/uploads/image", { method: "POST", body: formData });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data.url) {
+        setMessage(data.error || "Nuotraukos įkelti nepavyko.");
+        return;
+      }
+      setDraft((current) => ({
+        ...current,
+        image_url: data.url,
+        image_alt: current.image_alt || current.title || file.name.replace(/\.[^.]+$/, "")
+      }));
+      setMessage("Nuotrauka įkelta. Ji bus naudojama šiame straipsnyje.");
+    } catch {
+      setMessage("Nuotraukos įkelti nepavyko. Patikrinkite ryšį ir bandykite dar kartą.");
+    } finally {
+      setImageUploading(false);
+    }
   }
 
   async function saveArticle(event?: FormEvent, nextStatus?: string) {
@@ -225,7 +263,12 @@ export function AdminDashboard() {
             <label>Prioritetas<select value={draft.priority_score || 3} onChange={(e) => field("priority_score", Number(e.target.value))}>{[1,2,3,4,5].map((n) => <option key={n} value={n}>{n}/5</option>)}</select></label>
             <label>Rizika<select value={draft.risk_level || "low"} onChange={(e) => field("risk_level", e.target.value)}><option value="low">Žema</option><option value="medium">Vidutinė</option><option value="high">Aukšta</option></select></label>
             <label className="wide">Kodėl tai svarbu?<textarea rows={3} value={draft.why_it_matters || ""} onChange={(e) => field("why_it_matters", e.target.value)} /></label>
-            <label className="wide">Nuotraukos URL<input type="url" value={draft.image_url || ""} onChange={(e) => field("image_url", e.target.value)} /></label>
+            <label className="wide admin-image-upload">Įkelti nuotrauką iš kompiuterio
+              <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" disabled={imageUploading} onChange={(e) => uploadImage(e.target.files?.[0])} />
+              <small>{imageUploading ? "Nuotrauka įkeliama…" : "JPG, PNG, WebP arba GIF · iki 6 MB"}</small>
+              {draft.image_url ? <img className="admin-image-preview" src={draft.image_url} alt="Pasirinkta straipsnio nuotrauka" /> : null}
+            </label>
+            <label className="wide">Arba įklijuokite nuotraukos URL<input type="url" value={draft.image_url || ""} onChange={(e) => field("image_url", e.target.value)} /></label>
             <label className="wide">Nuotraukos aprašymas<input value={draft.image_alt || ""} onChange={(e) => field("image_alt", e.target.value)} /></label>
             <label>Nuotraukos fokusas horizontaliai: {draft.image_focus_x ?? 50}%<input type="range" min="0" max="100" value={draft.image_focus_x ?? 50} onChange={(e) => field("image_focus_x", Number(e.target.value))} /></label>
             <label>Nuotraukos fokusas vertikaliai: {draft.image_focus_y ?? 30}%<input type="range" min="0" max="100" value={draft.image_focus_y ?? 30} onChange={(e) => field("image_focus_y", Number(e.target.value))} /></label>
