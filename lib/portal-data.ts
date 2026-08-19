@@ -22,7 +22,7 @@ function hoursSince(value: string) {
   return Math.max(0, (Date.now() - new Date(value).getTime()) / 3_600_000);
 }
 
-const HERO_FRESH_HOURS = 36;
+const HERO_FRESH_HOURS = 18;
 const MANUAL_FEATURE_HOURS = 6;
 
 function sportBucket(value: string) {
@@ -76,16 +76,6 @@ export function preparePortalData(articleFeed: FeedItem[], shortFeed: FeedItem[]
       sport: "kitos-sporto-sakos",
       items: articles.filter((item) => sportBucket(item.sport) === "other").slice(0, 6)
     },
-    {
-      title: "Sporto vadyba",
-      sport: "sporto-vadyba",
-      items: articles.filter((item) => sportBucket(item.sport) === "management").slice(0, 3)
-    },
-    {
-      title: "Renginiai",
-      sport: "renginiai",
-      items: articles.filter((item) => sportBucket(item.sport) === "events").slice(0, 3)
-    }
   ].filter((group) => group.items.length > 0);
 
   const eventDateFormatter = new Intl.DateTimeFormat("lt-LT", { month: "long", day: "numeric" });
