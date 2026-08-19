@@ -172,6 +172,10 @@ export function AdminDashboard() {
 
   async function saveArticle(event?: FormEvent, nextStatus?: string) {
     event?.preventDefault();
+    if (imageUploading) {
+      setMessage("Palaukite, kol nuotrauka bus visiškai įkelta ir priskirta straipsniui.");
+      return;
+    }
     setBusy(true);
     setMessage("");
     const payload = { ...draft, status: nextStatus || draft.status, current_body: draft.body_markdown, current_image: draft.image_url };
@@ -252,7 +256,7 @@ export function AdminDashboard() {
 
       {tab === "editor" ? (
         <form className="admin-panel admin-editor" onSubmit={(event) => saveArticle(event)}>
-          <div className="admin-panel-head"><div><h2>{draft.id ? "Redaguoti straipsnį" : "Naujas straipsnis"}</h2><p>Redaktoriaus užrakintas įrašas automatikos nebus perrašytas.</p></div><div className="admin-save-actions"><button type="submit" disabled={busy}>Išsaugoti</button>{draft.id ? <button type="button" className="admin-primary" disabled={busy} onClick={() => saveArticle(undefined, "published")}>Publikuoti</button> : null}</div></div>
+          <div className="admin-panel-head"><div><h2>{draft.id ? "Redaguoti straipsnį" : "Naujas straipsnis"}</h2><p>Redaktoriaus užrakintas įrašas automatikos nebus perrašytas.</p></div><div className="admin-save-actions"><button type="submit" disabled={busy || imageUploading}>{imageUploading ? "Keliama…" : "Išsaugoti"}</button>{draft.id ? <button type="button" className="admin-primary" disabled={busy || imageUploading} onClick={() => saveArticle(undefined, "published")}>{imageUploading ? "Keliama…" : "Publikuoti"}</button> : null}</div></div>
           <div className="admin-form-grid">
             <label className="wide">Antraštė<input value={draft.title || ""} onChange={(e) => field("title", e.target.value)} required /></label>
             <label className="wide">Santrauka<textarea rows={3} value={draft.summary || ""} onChange={(e) => field("summary", e.target.value)} required /></label>
@@ -265,7 +269,7 @@ export function AdminDashboard() {
             <label className="wide">Kodėl tai svarbu?<textarea rows={3} value={draft.why_it_matters || ""} onChange={(e) => field("why_it_matters", e.target.value)} /></label>
             <label className="wide admin-image-upload">Įkelti nuotrauką iš kompiuterio
               <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" disabled={imageUploading} onChange={(e) => uploadImage(e.target.files?.[0])} />
-              <small>{imageUploading ? "Nuotrauka įkeliama…" : "JPG, PNG, WebP arba GIF · iki 6 MB"}</small>
+              <small>{imageUploading ? "Nuotrauka įkeliama…" : draft.image_url ? "Nuotrauka įkelta ir priskirta šiam straipsniui." : "JPG, PNG, WebP arba GIF · iki 6 MB"}</small>
               {draft.image_url ? <img className="admin-image-preview" src={draft.image_url} alt="Pasirinkta straipsnio nuotrauka" /> : null}
             </label>
             <label className="wide">Arba įklijuokite nuotraukos URL<input type="url" value={draft.image_url || ""} onChange={(e) => field("image_url", e.target.value)} /></label>
