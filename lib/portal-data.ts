@@ -29,7 +29,7 @@ function sportBucket(value: string) {
   const sport = value.toLocaleLowerCase("lt-LT");
   if (sport.includes("krep") || sport.includes("basket")) return "basketball";
   if (sport.includes("fut") || sport.includes("foot") || sport.includes("soccer")) return "football";
-  if (sport.includes("vady") || sport.includes("management")) return "management";
+  if (sport.includes("vady") || sport.includes("management") || sport.includes("business")) return "other";
   if (sport.includes("rengin") || sport.includes("event")) return "events";
   return "other";
 }

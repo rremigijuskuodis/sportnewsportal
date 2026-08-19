@@ -65,8 +65,8 @@ function toTitle(value: string) {
     shooting: "Šaudymas",
     fencing: "Fechtavimas",
     other: "Kitos sporto šakos",
-    sport_business: "Sporto verslas",
-    sports_business: "Sporto verslas",
+    sport_business: "Kitos sporto šakos",
+    sports_business: "Kitos sporto šakos",
     multi_sport: "Įvairios sporto šakos",
     result: "Rezultatas",
     news: "Naujienos",
@@ -91,7 +91,7 @@ function getSportClass(value: string) {
   const normalized = value.toLowerCase();
   if (normalized.includes("krep")) return "is-basketball";
   if (normalized.includes("fut")) return "is-football";
-  if (normalized.includes("vady")) return "is-business";
+  if (normalized.includes("vady") || normalized.includes("business")) return "is-other";
   if (normalized.includes("rengin")) return "is-event";
   return "is-other";
 }
