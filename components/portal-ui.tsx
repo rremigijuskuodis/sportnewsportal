@@ -698,7 +698,7 @@ export function ArticlePage({
           ) : null}
 
           <WhyItMattersBox text={getWhyText(item)} />
-          <MatchStatsBox stats={item.matchStats} />
+          {/* Statistika laikinai nerodoma: komponentas ir duomenys palikti būsimam patikimam integravimui. */}
 
           <div className="article-body">
             {(item.bodyMarkdown || item.summary).split("\n\n").map((paragraph, index) => (
