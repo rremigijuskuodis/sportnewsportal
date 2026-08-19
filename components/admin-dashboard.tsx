@@ -79,6 +79,7 @@ export function AdminDashboard() {
   const [message, setMessage] = useState("Kraunama…");
   const [busy, setBusy] = useState(false);
   const [imageUploading, setImageUploading] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
 
@@ -135,9 +136,12 @@ export function AdminDashboard() {
 
   async function uploadImage(file?: File) {
     if (!file) return;
-    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"];
     const maxBytes = 6 * 1024 * 1024;
-    if (!allowedTypes.includes(file.type)) {
+    const extension = file.name.split(".").pop()?.toLowerCase();
+    const inferredType = extension === "jpg" || extension === "jpeg" ? "image/jpeg" : extension ? `image/${extension}` : "";
+    const fileType = file.type || inferredType;
+    if (!allowedTypes.includes(fileType)) {
       setMessage("Įkelkite JPG, PNG, WebP arba GIF formato nuotrauką.");
       return;
     }
@@ -162,6 +166,7 @@ export function AdminDashboard() {
         image_url: data.url,
         image_alt: current.image_alt || current.title || file.name.replace(/\.[^.]+$/, "")
       }));
+      setSelectedImage(null);
       setMessage("Nuotrauka įkelta. Ji bus naudojama šiame straipsnyje.");
     } catch {
       setMessage("Nuotraukos įkelti nepavyko. Patikrinkite ryšį ir bandykite dar kartą.");
@@ -268,8 +273,9 @@ export function AdminDashboard() {
             <label>Rizika<select value={draft.risk_level || "low"} onChange={(e) => field("risk_level", e.target.value)}><option value="low">Žema</option><option value="medium">Vidutinė</option><option value="high">Aukšta</option></select></label>
             <label className="wide">Kodėl tai svarbu?<textarea rows={3} value={draft.why_it_matters || ""} onChange={(e) => field("why_it_matters", e.target.value)} /></label>
             <label className="wide admin-image-upload">Įkelti nuotrauką iš kompiuterio
-              <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" disabled={imageUploading} onChange={(e) => uploadImage(e.target.files?.[0])} />
-              <small>{imageUploading ? "Nuotrauka įkeliama…" : draft.image_url ? "Nuotrauka įkelta ir priskirta šiam straipsniui." : "JPG, PNG, WebP arba GIF · iki 6 MB"}</small>
+              <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" disabled={imageUploading} onChange={(e) => { setSelectedImage(e.target.files?.[0] || null); setMessage(""); }} />
+              {selectedImage ? <button type="button" onClick={() => uploadImage(selectedImage)} disabled={imageUploading}>{imageUploading ? "Nuotrauka įkeliama…" : "Įkelti pasirinktą nuotrauką"}</button> : null}
+              <small>{imageUploading ? "Nuotrauka įkeliama…" : draft.image_url ? "Nuotrauka įkelta ir priskirta šiam straipsniui." : selectedImage ? "Failas pasirinktas – paspauskite „Įkelti pasirinktą nuotrauką“." : "JPG, PNG, WebP arba GIF · iki 6 MB"}</small>
               {draft.image_url ? <img className="admin-image-preview" src={draft.image_url} alt="Pasirinkta straipsnio nuotrauka" /> : null}
             </label>
             <label className="wide">Arba įklijuokite nuotraukos URL<input type="url" value={draft.image_url || ""} onChange={(e) => field("image_url", e.target.value)} /></label>

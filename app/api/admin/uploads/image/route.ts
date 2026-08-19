@@ -6,6 +6,18 @@ const BUCKET = "article-images";
 const MAX_BYTES = 6 * 1024 * 1024;
 const ALLOWED_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
 
+function normalizedType(file: File) {
+  const reported = file.type.toLowerCase();
+  if (reported === "image/jpg") return "image/jpeg";
+  if (reported) return reported;
+  const extension = file.name.split(".").pop()?.toLowerCase();
+  if (extension === "jpg" || extension === "jpeg") return "image/jpeg";
+  if (extension === "png") return "image/png";
+  if (extension === "webp") return "image/webp";
+  if (extension === "gif") return "image/gif";
+  return "";
+}
+
 function extensionFor(type: string) {
   if (type === "image/png") return "png";
   if (type === "image/webp") return "webp";
@@ -41,18 +53,19 @@ export async function POST(request: NextRequest) {
   const formData = await request.formData();
   const file = formData.get("image");
   if (!(file instanceof File)) return NextResponse.json({ error: "Pasirinkite nuotraukos failą." }, { status: 400 });
-  if (!ALLOWED_TYPES.has(file.type)) return NextResponse.json({ error: "Leidžiami JPG, PNG, WebP ir GIF failai." }, { status: 400 });
+  const mimeType = normalizedType(file);
+  if (!ALLOWED_TYPES.has(mimeType)) return NextResponse.json({ error: "Leidžiami JPG, PNG, WebP ir GIF failai." }, { status: 400 });
   if (!file.size || file.size > MAX_BYTES) return NextResponse.json({ error: "Nuotrauka turi būti iki 6 MB dydžio." }, { status: 400 });
 
   try {
     await ensureBucket(url, serviceRoleKey);
-    const path = `manual/${Date.now()}-${randomUUID()}.${extensionFor(file.type)}`;
+    const path = `manual/${Date.now()}-${randomUUID()}.${extensionFor(mimeType)}`;
     const upload = await fetch(new URL(`/storage/v1/object/${BUCKET}/${path}`, url), {
       method: "POST",
       headers: {
         apikey: serviceRoleKey,
         Authorization: `Bearer ${serviceRoleKey}`,
-        "Content-Type": file.type,
+        "Content-Type": mimeType,
         "x-upsert": "false",
         "cache-control": "31536000"
       },
